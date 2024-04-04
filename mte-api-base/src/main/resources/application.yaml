@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: 'mte-api-base'
+  profiles:
+    active: 'dev'
+  main:
+    banner-mode: "off"
+logging:
+  level:
+    root: warn
+  file:
+    path: logs/app
+

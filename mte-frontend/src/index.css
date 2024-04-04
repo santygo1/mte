@@ -1,0 +1,11 @@
+/*Глобальные переменные стилей приложения */
+:root{
+  --menu-items-color: #2730f8
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
