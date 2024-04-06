@@ -3,3 +3,10 @@ spring:
     active: 'dev'
   application:
     name: mte-gateway
+logging:
+  level:
+    root: warn
+    ru.danilkaspirin.mtegateway: INFO
+    org.springframework.cloud.gateway: DEBUG
+  file:
+    path: logs/app
