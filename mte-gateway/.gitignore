@@ -34,3 +34,6 @@ build/
 
 ### logging ###
 logs
+
+### Configuration ###
+src/main/resources/application-dev.yaml
