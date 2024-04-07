@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Jira Workflow
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Extract Jira ticket number
         run: |
           COMMIT_MSG=$(git log -1 --pretty=format:%B)
