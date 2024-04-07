@@ -1,0 +1,31 @@
+name: Jira ticket transition
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Jira Workflow
+    steps:
+      - name: Extract Jira ticket number
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=format:%B)
+          TICKET_ID=$(echo "$COMMIT_MSG" | grep -oP '(?<=Jira: )[A-Z]+-[0-9]+')
+          if [ -n "$TICKET_ID" ]; then
+            echo "Jira ticket number: $TICKET_ID . This ticket will be transition to done."
+            echo "::set-env name=TICKET_ID::$TICKET_ID"
+          else
+            echo "Jira Ticket wasn't found in commit message"
+            exit 1
+          fi
+
+      - name: Transition issue
+        if: success()
+        uses: atlassian/gajira-transition@master
+        with:
+          issue: ${{ env.TICKET_ID }}
+          transition: "done"
+          server-url: ${{ secrets.JIRA_BASE_URL }}
+          username: ${{ secrets.JIRA_USERNAME }}
+          api-token: ${{ secrets.JIRA_API_TOKEN }}

@@ -1,0 +1,45 @@
+name: Create MTE gateway container and deploy to Dockerhub
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'mte-gateway/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: 'mte-gateway'
+    steps:
+    - 
+      name: Checkout repository
+      uses: actions/checkout@v3
+    - 
+      name: Set Up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'adopt'
+        java-version: '21'
+        cache: 'maven'
+    - 
+      name: Build MTE gateway
+      run: |
+        cd ./mte-gateway
+        mvn -B clean package -DskipTests
+    -
+      name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USER }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    -
+      name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    -
+      name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        context: ./mte-gateway
+        file: ./mte-gateway/Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USER }}/${{ env.IMAGE_NAME }}:latest

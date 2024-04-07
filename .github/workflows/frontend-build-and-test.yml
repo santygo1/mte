@@ -1,0 +1,43 @@
+name: Build & Test MTE Frontend
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'mte-frontend/**'
+      - '.github/workflows/frontend-build-and-test.yml'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'mte-frontend/**'
+      - '.github/workflows/frontend-build-and-test.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./mte-frontend
+    steps:
+    - 
+      name: Checkout repository
+      uses: actions/checkout@v3
+    - 
+      name:  Set up Node.js 20
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+        cache: 'npm'
+        cache-dependency-path: mte-frontend/package-lock.json  
+    - 
+      name: Install dependencies
+      run: npm install
+      working-directory: ${{env.working-directory}}
+    - 
+      name: Build
+      run: npm run build
+      working-directory: ${{env.working-directory}}
+
+    - 
+      name: Test Report
+      run: npm test
+      working-directory: ${{env.working-directory}}
