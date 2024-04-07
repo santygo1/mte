@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "api-base.host",
+      "type": "java.lang.String",
+      "description": "Description for api-base.host."
+    },
+    {
+      "name": "api-base.port",
+      "type": "java.lang.String",
+      "description": "Api for ap"
+    }
+  ] }

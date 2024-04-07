@@ -1,8 +1,14 @@
+api-base:
+  host: localhost
+  port: 8080
+
 spring:
   profiles:
     active: 'dev'
   application:
     name: mte-gateway
+  main:
+    banner-mode: "off"
 logging:
   level:
     root: warn
@@ -10,3 +16,19 @@ logging:
     org.springframework.cloud.gateway: DEBUG
   file:
     path: logs/app
+
+#Routes
+---
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: mte_get_trajectories
+          uri: http://${api-base.host}:${api-base.port}
+          predicates:
+            - Method=GET
+            - Path=/api/v1/map/trajectories
+            - Query=lonFrom
+            - Query=lonTo
+            - Query=latFrom
+            - Query=latTo
