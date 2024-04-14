@@ -32,3 +32,8 @@ spring:
             - Query=lonTo
             - Query=latFrom
             - Query=latTo
+        - id: mte_add_trajectories
+          uri: http://${api-base.host}}:${api-base.port}
+          predicates:
+            - Method=POST
+            - Path=/api/v1/trajectories
