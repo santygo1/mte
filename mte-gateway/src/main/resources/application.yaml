@@ -22,13 +22,6 @@ logging:
 spring:
   cloud:
     gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedMethods:
-              - GET
-              - POST
       routes:
         - id: mte_get_trajectories
           uri: http://${api-base.host}:${api-base.port}
