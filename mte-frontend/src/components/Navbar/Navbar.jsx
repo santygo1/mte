@@ -6,7 +6,7 @@ const Navbar = (props) => {
         // TODO: Изменить структуру Navbara
         <OrigNavbar {...props}>
             <Container>
-                <OrigNavbar.Brand href="#home">React-Bootstrap</OrigNavbar.Brand>
+                <OrigNavbar.Brand href="#home">MTE</OrigNavbar.Brand>
                 <OrigNavbar.Toggle aria-controls="basic-OrigNavbar-nav"/>
                 <OrigNavbar.Collapse id="basic-OrigNavbar-nav">
                     <Nav className="me-auto">

@@ -9,7 +9,7 @@ const App = () => {
             <Navbar expand="lg" className="bg-body-tertiary"/>
             <Row className={"vh-100 g-0"} >
                 <Col md={"auto"}>
-                    <Sidebar items={[{name:'привет'},{name:'привет'},{name:'привет'},{name:'привет'}]}/>
+                    <Sidebar />
                 </Col>
                 <Col className={"w-100"}>
                    <Map/>

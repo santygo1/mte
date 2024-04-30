@@ -14,12 +14,12 @@ const BASE_ITEMS = [
     }
 ]
 
-const Sidebar = (props) => {
-    const items = [...BASE_ITEMS, ...props.items];
+const Sidebar = ({items = []}) => {
+    const l_items = [...BASE_ITEMS, ...items];
 
     return (
         <div className={classes.Sidebar}>
-            {items.map((item, i) => {
+            {l_items.map((item, i) => {
                 const idPrefix = 'base_menu_item_' + ((typeof item.id === 'undefined') || item.id === null || item.id.length === 0 ? i : item.id);
 
                 const tooltip =
@@ -40,11 +40,6 @@ const Sidebar = (props) => {
                     >
                         <FontAwesomeIcon icon={icon}/>
                     </Button>;
-
-                console.log(idPrefix)
-                console.log(tooltip)
-                console.log(item)
-                console.log(button)
 
                 return tooltip === null ?
                     button
