@@ -1,4 +1,4 @@
-package ru.danilspirin.mteapibase.application.dto.responses.errors;
+package ru.danilspirin.mteapibase.application.dto.errors;
 
 public final class ErrorConstants {
 

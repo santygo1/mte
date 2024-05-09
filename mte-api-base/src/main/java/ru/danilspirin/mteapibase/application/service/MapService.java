@@ -1,11 +1,11 @@
 package ru.danilspirin.mteapibase.application.service;
 
-import ru.danilspirin.mteapibase.application.aop.logging.LogExecutionTime;
-import ru.danilspirin.mteapibase.application.model.Trajectory;
+import ru.danilspirin.mteapibase.application.dto.TrajectoryDto;
+import ru.danilspirin.mteapibase.application.model.TrajectoryModel;
 
 import java.util.List;
 
 public interface MapService {
 
-    List<Trajectory> getTrajectoriesInCoordinates(double lonFrom, double lonTo, double latFrom, double latTo);
+    List<TrajectoryDto> getTrajectoriesInCoordinates(double lonFrom, double lonTo, double latFrom, double latTo);
 }
