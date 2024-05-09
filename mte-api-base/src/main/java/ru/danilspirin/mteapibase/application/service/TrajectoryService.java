@@ -1,16 +1,19 @@
 package ru.danilspirin.mteapibase.application.service;
 
-import ru.danilspirin.mteapibase.application.model.Trajectory;
+import ru.danilspirin.mteapibase.application.dto.TrajectoryDto;
 
 import java.util.List;
 import java.util.Optional;
 
 
 public interface TrajectoryService {
-    Optional<Trajectory> getTrajectoryById(String id);
+    Optional<TrajectoryDto> getTrajectoryById(String id);
 
-    List<Trajectory> getAllTrajectories();
+    List<TrajectoryDto> getAllTrajectories();
 
-    Trajectory addTrajectory(Trajectory trajectory);
+    TrajectoryDto addTrajectory(TrajectoryDto trajectoryDto);
 
+    TrajectoryDto updateTrajectory(String trajectoryId, TrajectoryDto trajectoryDto);
+
+    void deleteTrajectory(String id);
 }

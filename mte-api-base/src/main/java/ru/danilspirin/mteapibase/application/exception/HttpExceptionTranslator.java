@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import ru.danilspirin.mteapibase.application.dto.responses.errors.ErrorConstants;
-import ru.danilspirin.mteapibase.application.dto.responses.errors.ErrorResponse;
+import ru.danilspirin.mteapibase.application.dto.errors.ErrorConstants;
+import ru.danilspirin.mteapibase.application.dto.errors.ErrorResponse;
 
 import java.util.List;
 

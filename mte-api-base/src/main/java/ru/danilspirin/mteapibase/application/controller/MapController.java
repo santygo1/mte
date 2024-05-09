@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.danilspirin.mteapibase.application.dto.converters.TrajectoryConverter;
+import ru.danilspirin.mteapibase.application.converters.TrajectoryConverter;
+import ru.danilspirin.mteapibase.application.dto.TrajectoryDto;
 import ru.danilspirin.mteapibase.application.dto.responses.TrajectoryResponse;
-import ru.danilspirin.mteapibase.application.model.Trajectory;
+import ru.danilspirin.mteapibase.application.model.TrajectoryModel;
 import ru.danilspirin.mteapibase.application.service.MapService;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class MapController {
             @RequestParam Double latFrom,
             @RequestParam Double latTo
     ) {
-        List<Trajectory> trajectories = mapService.getTrajectoriesInCoordinates(lonFrom, lonTo, latFrom, latTo);
+        List<TrajectoryDto> trajectories = mapService.getTrajectoriesInCoordinates(lonFrom, lonTo, latFrom, latTo);
 
         return ResponseEntity.ok(
                 trajectories.stream().map(trajectoryConverter::toResponse).toList()

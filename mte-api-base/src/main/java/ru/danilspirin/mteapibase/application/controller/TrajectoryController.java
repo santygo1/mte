@@ -6,14 +6,17 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.danilspirin.mteapibase.application.dto.TrajectoryDto;
 import ru.danilspirin.mteapibase.application.dto.requests.TrajectoryCreateRequest;
+import ru.danilspirin.mteapibase.application.dto.requests.TrajectoryUpdateRequest;
 import ru.danilspirin.mteapibase.application.dto.responses.TrajectoryResponse;
 import ru.danilspirin.mteapibase.application.exception.TrajectoryNotFound;
-import ru.danilspirin.mteapibase.application.model.Trajectory;
 import ru.danilspirin.mteapibase.application.service.TrajectoryService;
-import ru.danilspirin.mteapibase.application.dto.converters.TrajectoryConverter;
+import ru.danilspirin.mteapibase.application.converters.TrajectoryConverter;
 
 import java.util.List;
 
@@ -29,7 +32,7 @@ public class TrajectoryController {
 
     @GetMapping
     ResponseEntity<List<TrajectoryResponse>> getAll() {
-        List<Trajectory> trajectories = trajectoryService.getAllTrajectories();
+        List<TrajectoryDto> trajectories = trajectoryService.getAllTrajectories();
 
         return ResponseEntity.ok(
                 trajectories.stream()
@@ -38,18 +41,56 @@ public class TrajectoryController {
     }
 
     @GetMapping("/{trajectoryId}")
-    ResponseEntity<TrajectoryResponse> getById(@PathVariable("trajectoryId") String id) {
-        Trajectory trajectory = trajectoryService
+    ResponseEntity<TrajectoryResponse> getById(
+            @PathVariable("trajectoryId") String id
+    ) {
+        TrajectoryDto trajectoryModel = trajectoryService
                 .getTrajectoryById(id)
                 .orElseThrow(() -> new TrajectoryNotFound(id));
 
-        return ResponseEntity.ok(trajectoryConverter.toResponse(trajectory));
+        return ResponseEntity.ok(trajectoryConverter.toResponse(trajectoryModel));
     }
 
-    @PostMapping("")
-    ResponseEntity<TrajectoryResponse> createTrajectory(@RequestBody @Valid TrajectoryCreateRequest trajectory) {
-        Trajectory created = trajectoryService.addTrajectory(trajectoryConverter.toEntity(trajectory));
+    @PostMapping
+    ResponseEntity<TrajectoryResponse> createTrajectory(
+            @RequestBody @Valid TrajectoryCreateRequest trajectory
+    ) {
+        TrajectoryDto created = trajectoryService.addTrajectory(trajectoryConverter.toDto(trajectory));
 
-        return ResponseEntity.ok(trajectoryConverter.toResponse(created));
+        return ResponseEntity
+                .created(
+                        ServletUriComponentsBuilder
+                                .fromCurrentRequest()
+                                .path("/{id}")
+                                .buildAndExpand(created.getTrajectoryId())
+                                .toUri()
+                )
+                .body(trajectoryConverter.toResponse(created));
     }
+
+    @PutMapping("/{trajectoryId}")
+    ResponseEntity<TrajectoryResponse> updateTrajectory(
+            @RequestBody @Valid TrajectoryUpdateRequest trajectoryUpdateRequest,
+            @PathVariable String trajectoryId
+    ) {
+        TrajectoryDto dto = trajectoryService.updateTrajectory(trajectoryId, trajectoryConverter.toDto(trajectoryUpdateRequest));
+        TrajectoryResponse response = trajectoryConverter.toResponse(dto);
+        return dto.isCreated() ?
+                ResponseEntity.created(
+                                ServletUriComponentsBuilder
+                                        .fromCurrentRequest()
+                                        .build().toUri()
+                        )
+                        .body(response) :
+                ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{trajectoryId}")
+    ResponseEntity<Void> deleteTrajectoryById(
+            @PathVariable String trajectoryId
+    ) {
+        trajectoryService.deleteTrajectory(trajectoryId);
+        return ResponseEntity.noContent().build();
+    }
+
 }
