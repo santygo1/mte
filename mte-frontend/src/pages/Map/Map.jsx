@@ -1,43 +1,41 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import classes from "./Map.module.css";
-import {MapContainer, Polyline, TileLayer} from "react-leaflet";
+import {MapContainer, TileLayer} from "react-leaflet";
+import TrajectoryService from "../../api/service/TrajectoryService.js";
+import useFetch from "../../hooks/useFetch.js";
+import Trajectory from "../../components/Trajectory/Trajectory.jsx";
+import TrajectoryInfoOffcanvas from "../../components/Trajectory/TrajectoryInfoOffcanvas/TrajectoryInfoOffcanvas.jsx";
+import TrajectoryMapProvider from "../../contexts/TrajectoryMapContext/TrajectoryMapProvider.jsx";
+import TrajectoryMapContext from "../../contexts/TrajectoryMapContext/TrajectoryMapContext.jsx";
 
 const Map = () => {
-    const [trajectories, setTrajectories] = useState([]);
 
-    const [trajectory, setTrajectory] = useState([]);
+    const mapContext = useContext(TrajectoryMapContext);
+
+    const [trajectories, setTrajectories] = useState([]);
+    const [fetchTrajectories, isTrajectoriesLoading, trajectoriesError] = useFetch(
+        async () => {
+            const fetch = await TrajectoryService.getAll();
+            setTrajectories(fetch);
+        }
+    );
 
     useEffect(() => {
-        //TODO: Поменять моковый запрос данных траектории с сервера
-        fetch("/api/v1/map/trajectories?lonFrom=-180&lonTo=180&latFrom=-90&latTo=90",
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                method: 'GET'
-            })
-            .then((data) => data.json())
-            .then((data) => {
-                const tr = data.map(t => [t.coordinates.map(c => [c.lat, c.lon])]);
-                console.log(tr)
-                setTrajectory(tr);
-            });
+        fetchTrajectories();
     }, []);
 
     return (
-        <MapContainer className={classes.Map} center={[43.0678, 131.893]} zoom={13}>
-            <TileLayer
-                continuousWorld={true}
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+        <>
+            <TrajectoryMapProvider>
+                <MapContainer className={classes.Map} center={[43.0678, 131.893]} zoom={13}>
+                    <TileLayer continuousWorld={true} url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
 
-            {trajectory && (
-                <Polyline positions={trajectory} color="blue" weight={1}/>
-            )}
-            {trajectories.map((t, key) =>
-                <Polyline key={key} positions={t.coordinates} color="blue" weight={1}/>
-            )}
-        </MapContainer>
+                    {trajectories.map((t) => <Trajectory key={t.trajectoryId} trajectoryObj={t}/>)}
+
+                    <TrajectoryInfoOffcanvas/>
+                </MapContainer>
+            </TrajectoryMapProvider>
+        </>
     );
 };
 
