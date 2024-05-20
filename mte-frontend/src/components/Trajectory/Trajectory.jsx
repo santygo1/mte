@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {Fragment, useMemo, useContext, useState} from 'react';
 import TrajectorySkeleton from "./TrajectorySkeleton/TrajectorySkeleton.jsx";
 import TrajectoryPolyline from "./TrajectoryPolyline/TrajectoryPolyline.jsx";
 import TrajectoryMapContext from "../../contexts/TrajectoryMapContext/TrajectoryMapContext.jsx";
@@ -15,19 +15,16 @@ const ONFOCUS_TRAJECTORY_WEIGHT = 4; // ширина траектории при
 const Trajectory = ({trajectoryObj}) => {
 
     const mapContext = useContext(TrajectoryMapContext);
-    console.log("Перерисовал " + trajectoryObj.trajectoryId);
+
+    const contextValue = useMemo(() => ({
+        ...mapContext,
+        isCurrentTrajectory: mapContext.isCurrentTrajectory(trajectoryObj),
+    }), [mapContext, trajectoryObj]);
+
     const [focus, setFocus] = useState(false);
-
-    function handleChangeShowInfo() {
-        if (mapContext.currentTrajectory !== null && mapContext.currentTrajectory.trajectoryId === trajectoryObj.trajectoryId) {
-            mapContext.setCurrentTrajectory(null);
-        } else {
-            mapContext.setCurrentTrajectory(trajectoryObj);
-        }
-    }
-
+    
     let trajectoryOptions = DEFAULT_TRAJECTORY_OPTIONS;
-    if (!mapContext.isCurrentTrajectory(trajectoryObj)) {
+    if (!contextValue.isCurrentTrajectory) {
         if (focus) { // Если траектория находится в фокусе
             trajectoryOptions = {...trajectoryOptions, weight: ONFOCUS_TRAJECTORY_WEIGHT};
         }
@@ -37,16 +34,16 @@ const Trajectory = ({trajectoryObj}) => {
 
     return (
         <>
+            {console.log(`Рендер: ${trajectoryObj.trajectoryId}`)}
             <TrajectoryPolyline
+                key={trajectoryObj.trajectoryId}
                 trajectory={trajectoryObj}
-                onClick={handleChangeShowInfo}
+                onClick={() => contextValue.setCurrentTrajectory(trajectoryObj)}
                 onFocus={() => setFocus(true)}
                 onBlur={() => setFocus(false)}
                 pathOptions={trajectoryOptions}
             />
-
-            {/*Выводим координаты если траектория находится в фокусе на карте */}
-            {mapContext.isCurrentTrajectory(trajectoryObj) && <TrajectorySkeleton trajectory={trajectoryObj}/>}
+            {contextValue.isCurrentTrajectory && <TrajectorySkeleton trajectory={trajectoryObj}/>}
         </>
     );
 };

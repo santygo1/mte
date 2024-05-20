@@ -19,7 +19,6 @@ const Map = () => {
             setTrajectories(fetch);
         }
     );
-
     useEffect(() => {
         fetchTrajectories();
     }, []);

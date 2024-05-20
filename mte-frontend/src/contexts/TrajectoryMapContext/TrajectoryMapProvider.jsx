@@ -1,8 +1,9 @@
 import {useState} from "react";
-import TrajectoryMapContext from "./TrajectoryMapContext.jsx";
+import TrajectoryMapContext, {MAP_MODE} from "./TrajectoryMapContext.jsx";
 
 const TrajectoryMapProvider = ({children}) => {
     const [currentTrajectory, setCurrentTrajectory] = useState(null);
+    const [mapMode, setMapMode] = useState(MAP_MODE.VIEW);
 
     function currentTrajectoryExists() {
         return currentTrajectory !== null;
@@ -14,10 +15,26 @@ const TrajectoryMapProvider = ({children}) => {
             false;
     }
 
+    function setViewMode() {
+        setMapMode(MAP_MODE.VIEW);
+    }
+
+    function setEditMode() {
+        setMapMode(MAP_MODE.EDIT);
+    }
+
 
     return (
         <TrajectoryMapContext.Provider
-            value={{currentTrajectory, setCurrentTrajectory, currentTrajectoryExists, isCurrentTrajectory}}>
+            value={{
+                mapMode,
+                currentTrajectory,
+                setViewMode,
+                setEditMode,
+                setCurrentTrajectory,
+                currentTrajectoryExists,
+                isCurrentTrajectory,
+            }}>
             {children}
         </TrajectoryMapContext.Provider>
     );
