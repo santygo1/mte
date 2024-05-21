@@ -1,7 +1,6 @@
-import React, {Fragment, useMemo, useContext, useState} from 'react';
-import TrajectorySkeleton from "./TrajectorySkeleton/TrajectorySkeleton.jsx";
-import TrajectoryPolyline from "./TrajectoryPolyline/TrajectoryPolyline.jsx";
-import TrajectoryMapContext from "../../contexts/TrajectoryMapContext/TrajectoryMapContext.jsx";
+import React, {memo, useRef} from 'react';
+import Coordinate from "./Coordinate/Coordinate.jsx";
+import {Polyline} from "react-leaflet";
 
 // Настройки отображения pathOptions для
 const DEFAULT_TRAJECTORY_OPTIONS = {
@@ -9,43 +8,54 @@ const DEFAULT_TRAJECTORY_OPTIONS = {
     weight: 2
 };
 const HIGHLIGHTED_TRAJECTORY_OPTIONS = {...DEFAULT_TRAJECTORY_OPTIONS, color: "red"};
-
 const ONFOCUS_TRAJECTORY_WEIGHT = 4; // ширина траектории при ее фокусе;
 
-const Trajectory = ({trajectoryObj}) => {
+const Trajectory = memo(function Trajectory({trajectoryObj, isCurrentTrajectory, setCurrentTrajectory}) {
 
-    const mapContext = useContext(TrajectoryMapContext);
-
-    const contextValue = useMemo(() => ({
-        ...mapContext,
-        isCurrentTrajectory: mapContext.isCurrentTrajectory(trajectoryObj),
-    }), [mapContext, trajectoryObj]);
-
-    const [focus, setFocus] = useState(false);
-    
+    // В зависимости от выбрана траектория или нет устанавливаем определенные стили отображения
     let trajectoryOptions = DEFAULT_TRAJECTORY_OPTIONS;
-    if (!contextValue.isCurrentTrajectory) {
-        if (focus) { // Если траектория находится в фокусе
-            trajectoryOptions = {...trajectoryOptions, weight: ONFOCUS_TRAJECTORY_WEIGHT};
-        }
-    } else {
+    if (isCurrentTrajectory) {
         trajectoryOptions = HIGHLIGHTED_TRAJECTORY_OPTIONS;
     }
 
+    const polylineRef = useRef();
+    // Устанавливаем фокус, если траектория не является текущей выбранной траекторией
+    // Функция использует useRef, что предотвращает перерендер
+    function onChangeFocus(focus) {
+        if (!isCurrentTrajectory) {
+            const polyline = polylineRef.current;
+            if (!polyline) return;
+
+            if (focus) {
+                polyline.setStyle({weight: ONFOCUS_TRAJECTORY_WEIGHT});
+            } else {
+                polyline.setStyle(trajectoryOptions)
+            }
+        }
+    }
+
+    console.log(`rerender ${trajectoryObj.trajectoryId} at ${new Date().toLocaleTimeString()}`);
     return (
         <>
-            {console.log(`Рендер: ${trajectoryObj.trajectoryId}`)}
-            <TrajectoryPolyline
-                key={trajectoryObj.trajectoryId}
-                trajectory={trajectoryObj}
-                onClick={() => contextValue.setCurrentTrajectory(trajectoryObj)}
-                onFocus={() => setFocus(true)}
-                onBlur={() => setFocus(false)}
+            <Polyline
+                ref={polylineRef}
+                positions={trajectoryObj.coordinates}
                 pathOptions={trajectoryOptions}
-            />
-            {contextValue.isCurrentTrajectory && <TrajectorySkeleton trajectory={trajectoryObj}/>}
+                eventHandlers={{
+                    click: () => setCurrentTrajectory(trajectoryObj),
+                    mouseover: () => onChangeFocus(true),
+                    mouseout: () => onChangeFocus(false)
+                }}
+            >
+            </Polyline>
+            {isCurrentTrajectory && trajectoryObj.coordinates.map((c) =>
+                <Coordinate
+                    key={"coord-" + trajectoryObj.trajectoryId + ":" + c.lat + "-" + c.lon}
+                    lat={c.lat}
+                    lon={c.lon}
+                />)}
         </>
     );
-};
+});
 
 export default Trajectory;

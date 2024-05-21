@@ -1,18 +1,13 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import classes from "./TrajectoryInfoOffcanvas.module.css";
 import {Offcanvas, Table} from "react-bootstrap";
-import TrajectoryMapContext from "../../../contexts/TrajectoryMapContext/TrajectoryMapContext.jsx";
 
-const TrajectoryInfoOffcanvas = () => {
-
-    const mapContext = useContext(TrajectoryMapContext);
-
-    const showCurrentTrajectoryInfo = mapContext.currentTrajectoryExists();
+const TrajectoryInfoOffcanvas = ({currentTrajectory, setCurrentTrajectory}) => {
 
     return (
-        showCurrentTrajectoryInfo &&
-        <Offcanvas show={showCurrentTrajectoryInfo}
-                   onHide={() => mapContext.setCurrentTrajectory(null)}
+        currentTrajectory !== null &&
+        <Offcanvas show={true}
+                   onHide={() => setCurrentTrajectory(null)}
                    backdrop={false}
                    scroll={true}
                    placement={'end'}
@@ -27,23 +22,25 @@ const TrajectoryInfoOffcanvas = () => {
                     <tbody>
                     <tr>
                         <td>id</td>
-                        <td>{mapContext.currentTrajectory.trajectoryId}</td>
+                        <td>{currentTrajectory.trajectoryId}</td>
                     </tr>
                     <tr>
                         <td>Судно</td>
-                        <td>{mapContext.currentTrajectory.vesselId}</td>
+                        <td>{currentTrajectory.vesselId}</td>
+                    </tr>
+                    </tbody>
+                </Table>
+
+                <h6>Маршрут</h6>
+                <Table>
+                    <tbody>
+                    <tr>
+                        <td>Отправление</td>
+                        <td>{currentTrajectory.from}</td>
                     </tr>
                     <tr>
-                        <td>Порт(из)</td>
-                        <td>{mapContext.currentTrajectory.from}</td>
-                    </tr>
-                    <tr>
-                        <td>Режим карты</td>
-                        <td>{mapContext.mode}</td>
-                    </tr>
-                    <tr>
-                        <td>Порт(назначение)</td>
-                        <td>{mapContext.currentTrajectory.to}</td>
+                        <td>Назначение</td>
+                        <td>{currentTrajectory.to}</td>
                     </tr>
                     </tbody>
                 </Table>
