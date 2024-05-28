@@ -1,16 +1,17 @@
 import React, {memo, useRef} from 'react';
 import Coordinate from "./Coordinate/Coordinate.jsx";
 import {Polyline} from "react-leaflet";
+import {
+    DEFAULT_TRAJECTORY_OPTIONS,
+    HIGHLIGHTED_TRAJECTORY_OPTIONS,
+    ONFOCUS_TRAJECTORY_WEIGHT
+} from "../../util/TrajectoryOptions.js";
 
-// Настройки отображения pathOptions для
-const DEFAULT_TRAJECTORY_OPTIONS = {
-    color: "blue",
-    weight: 2
-};
-const HIGHLIGHTED_TRAJECTORY_OPTIONS = {...DEFAULT_TRAJECTORY_OPTIONS, color: "red"};
-const ONFOCUS_TRAJECTORY_WEIGHT = 4; // ширина траектории при ее фокусе;
-
-const Trajectory = memo(function Trajectory({trajectoryObj, isCurrentTrajectory, setCurrentTrajectory}) {
+const Trajectory = memo(function Trajectory({
+                                                trajectoryObj,
+                                                isCurrentTrajectory,
+                                                setCurrentTrajectory
+                                            }) {
 
     // В зависимости от выбрана траектория или нет устанавливаем определенные стили отображения
     let trajectoryOptions = DEFAULT_TRAJECTORY_OPTIONS;
@@ -19,14 +20,15 @@ const Trajectory = memo(function Trajectory({trajectoryObj, isCurrentTrajectory,
     }
 
     const polylineRef = useRef();
+
     // Устанавливаем фокус, если траектория не является текущей выбранной траекторией
     // Функция использует useRef, что предотвращает перерендер
-    function onChangeFocus(focus) {
+    function onHover(isHover) {
         if (!isCurrentTrajectory) {
             const polyline = polylineRef.current;
             if (!polyline) return;
 
-            if (focus) {
+            if (isHover) {
                 polyline.setStyle({weight: ONFOCUS_TRAJECTORY_WEIGHT});
             } else {
                 polyline.setStyle(trajectoryOptions)
@@ -43,8 +45,8 @@ const Trajectory = memo(function Trajectory({trajectoryObj, isCurrentTrajectory,
                 pathOptions={trajectoryOptions}
                 eventHandlers={{
                     click: () => setCurrentTrajectory(trajectoryObj),
-                    mouseover: () => onChangeFocus(true),
-                    mouseout: () => onChangeFocus(false)
+                    mouseover: () => onHover(true),
+                    mouseout: () => onHover(false)
                 }}
             >
             </Polyline>

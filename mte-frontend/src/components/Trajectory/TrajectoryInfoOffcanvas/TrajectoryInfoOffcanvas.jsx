@@ -1,13 +1,13 @@
 import React from 'react';
 import classes from "./TrajectoryInfoOffcanvas.module.css";
-import {Offcanvas, Table} from "react-bootstrap";
+import {Button, Offcanvas, Table} from "react-bootstrap";
 
-const TrajectoryInfoOffcanvas = ({currentTrajectory, setCurrentTrajectory}) => {
+const TrajectoryInfoOffcanvas = ({trajectory, onClose, onEditClick}) => {
 
     return (
-        currentTrajectory !== null &&
+        trajectory !== null &&
         <Offcanvas show={true}
-                   onHide={() => setCurrentTrajectory(null)}
+                   onHide={onClose}
                    backdrop={false}
                    scroll={true}
                    placement={'end'}
@@ -18,15 +18,16 @@ const TrajectoryInfoOffcanvas = ({currentTrajectory, setCurrentTrajectory}) => {
             </Offcanvas.Header>
 
             <Offcanvas.Body>
+                <Button onClick={onEditClick}>Edit</Button>
                 <Table>
                     <tbody>
                     <tr>
                         <td>id</td>
-                        <td>{currentTrajectory.trajectoryId}</td>
+                        <td>{trajectory.trajectoryId}</td>
                     </tr>
                     <tr>
                         <td>Судно</td>
-                        <td>{currentTrajectory.vesselId}</td>
+                        <td>{trajectory.vesselId}</td>
                     </tr>
                     </tbody>
                 </Table>
@@ -36,11 +37,11 @@ const TrajectoryInfoOffcanvas = ({currentTrajectory, setCurrentTrajectory}) => {
                     <tbody>
                     <tr>
                         <td>Отправление</td>
-                        <td>{currentTrajectory.from}</td>
+                        <td>{trajectory.from}</td>
                     </tr>
                     <tr>
                         <td>Назначение</td>
-                        <td>{currentTrajectory.to}</td>
+                        <td>{trajectory.to}</td>
                     </tr>
                     </tbody>
                 </Table>
