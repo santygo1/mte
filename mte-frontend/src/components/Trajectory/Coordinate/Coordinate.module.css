@@ -1,3 +1,4 @@
-.Coordinate {
-
+.draggable:active {
+    background: blue;
 }
+

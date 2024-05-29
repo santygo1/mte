@@ -1,12 +1,12 @@
 // Константы PathOptions для траекторий
 
 export const EDIT_TRAJECTORY_TRACK_OPTIONS = {
-    color: "grey",
+    color: "blue",
     dashArray: '10, 10',
     dashOffset: '0'
 };
 export const EDIT_TRAJECTORY_HINT_OPTIONS = {
-    color: "lightGray"
+    color: "gray"
 }
 
 export const DEFAULT_TRAJECTORY_OPTIONS = {
@@ -14,4 +14,5 @@ export const DEFAULT_TRAJECTORY_OPTIONS = {
     weight: 2
 };
 export const HIGHLIGHTED_TRAJECTORY_OPTIONS = {...DEFAULT_TRAJECTORY_OPTIONS, color: "red"};
+
 export const ONFOCUS_TRAJECTORY_WEIGHT = 4; // ширина траектории при ее фокусе;
