@@ -1,5 +1,5 @@
 import React, {memo, useRef} from 'react';
-import CoordinateMarker from "../CoordinateMarker/CoordinateMarker.jsx";
+import CoordinateMarker from "./CoordinateMarker/CoordinateMarker.jsx";
 import classes from "./Coordinate.module.css";
 
 const Coordinate = memo(({lat, lon, onDragEnd, onDragging, draggable = false}) => {

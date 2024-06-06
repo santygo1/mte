@@ -1,0 +1,116 @@
+:root {
+    --sidebar-buttons-panel-width: 64px;
+    --sidbar-offcanvas-widht: 380px;
+    --sidbar-border-color: var(--base-ui-txt-color-light);
+    --sidebar-close-btn-icon-color: #70757a;
+}
+
+.MapSidebar {
+    position: relative;
+    display: flex;
+}
+
+.MapSidebar > * {
+    height: 100vh;
+    position: absolute;
+}
+
+.MapSidebar > .OffcanvasWrapper {
+    left: var(--sidebar-buttons-panel-width);
+    z-index: 9998;
+    display: block;
+}
+
+.MapSidebar > .ButtonsPanel {
+    z-index: 9999;
+    display: flex;
+}
+
+.ButtonsPanel {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    background: var(--base-ui-bkg-color-light);
+    width: var(--sidebar-buttons-panel-width);
+    min-width: var(--sidebar-buttons-panel-width);
+    max-width: var(--sidebar-buttons-panel-width);
+}
+
+.ButtonsPanel, .Offcanvas {
+    border-right: 1px solid var(--sidbar-border-color);
+}
+
+
+.ButtonsPanel > button {
+    width: 100%;
+    background: transparent;
+    padding: 10px 0;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--base-ui-menu-btn-color-light);
+    border-radius: 0;
+    font-size: 14px;
+}
+
+.ButtonsPanel > button:first-child {
+    margin-top: 16px;
+}
+
+.ButtonsPanel > button:hover {
+    background: transparent;
+    color: var(--base-ui-primary-color-light);
+}
+
+.ButtonsPanel > button:active {
+    background-color: transparent !important;
+    color: var(--base-ui-primary-color-light) !important;
+    filter: brightness(85%);
+}
+
+.OffcanvasWrapper {
+    display: flex !important;
+    align-items: center;
+}
+
+.Offcanvas {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: var(--sidbar-offcanvas-widht);
+    background: var(--base-ui-bkg-color-light);
+    box-shadow: 51px 4px 8px -51px rgba(0, 0, 0, 0.19) inset;
+    -webkit-box-shadow: 51px 4px 8px -51px rgba(0, 0, 0, 0.19) inset;
+    -moz-box-shadow: 51px 4px 8px -51px rgba(0, 0, 0, 0.19) inset;
+    border-right: solid 1px var(--base-ui-txt-color-light);
+}
+
+.OffcanvasHeader {
+    height: 160px;
+    background: #2730f8;
+}
+
+.Offcanvas > .OffcanvasBody,
+.Offcanvas > .OffcanvasHeader {
+    padding: 10px;
+}
+
+.OffcanvasButtonPanel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.OffcanvasButtonClose {
+    display: block;
+    width: 20px;
+    height: 60px;
+    background: var(--base-ui-bkg-color-light) !important;
+    border: none !important;
+    border-radius: 0 10px 10px 0 !important;
+    padding: 10px 0 !important;
+    color: var(--sidebar-close-btn-icon-color) !important;
+    font-size: 12px !important;
+}

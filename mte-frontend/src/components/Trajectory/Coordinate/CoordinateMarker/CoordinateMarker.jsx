@@ -4,8 +4,10 @@ import classes from "./CoordinateMarker.module.css";
 
 const CoordinateMarker = forwardRef((props, ref) => {
     let className = classes.DefaultCoordinateIcon;
-    if (props.className) {
-        className += " " + props.className;
+    const newprops = {...props};
+    if (newprops.className) {
+        className += " " + newprops.className;
+        newprops.className = null;
     }
 
     return <Marker ref={ref} icon={L.divIcon({className: className})} {...props} />
