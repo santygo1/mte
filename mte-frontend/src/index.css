@@ -18,4 +18,14 @@ hr {
     background: var(--base-ui-txt-color-light);
 }
 
+.fullscreen-page {
+    width: 100vw;
+    height: 100vh;
+}
+
+.hud-element {
+    z-index: 9999;
+    position: fixed;
+}
+
 

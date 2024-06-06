@@ -6,23 +6,21 @@
 }
 
 .MapSidebar {
-    position: relative;
+    top: 0;
+    left: 0;
     display: flex;
 }
 
 .MapSidebar > * {
     height: 100vh;
-    position: absolute;
 }
 
 .MapSidebar > .OffcanvasWrapper {
     left: var(--sidebar-buttons-panel-width);
-    z-index: 9998;
     display: block;
 }
 
 .MapSidebar > .ButtonsPanel {
-    z-index: 9999;
     display: flex;
 }
 
@@ -32,8 +30,7 @@
     align-items: center;
     background: var(--base-ui-bkg-color-light);
     width: var(--sidebar-buttons-panel-width);
-    min-width: var(--sidebar-buttons-panel-width);
-    max-width: var(--sidebar-buttons-panel-width);
+    z-index: 9999;
 }
 
 .ButtonsPanel, .Offcanvas {
@@ -44,7 +41,7 @@
 .ButtonsPanel > button {
     width: 100%;
     background: transparent;
-    padding: 10px 0;
+    margin: 10px 0;
     border: none;
     display: flex;
     flex-direction: column;
@@ -79,6 +76,7 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    z-index: 9998;
     width: var(--sidbar-offcanvas-widht);
     background: var(--base-ui-bkg-color-light);
     box-shadow: 51px 4px 8px -51px rgba(0, 0, 0, 0.19) inset;
@@ -113,4 +111,25 @@
     padding: 10px 0 !important;
     color: var(--sidebar-close-btn-icon-color) !important;
     font-size: 12px !important;
+}
+
+.OffcanvasEntering, .OffcanvasEntering ~ .OffcanvasButtonClose {
+    animation: ease .5s slide-offcanvas forwards;
+}
+
+.OffcanvasExiting, .OffcanvasExiting ~ .OffcanvasButtonClose {
+    animation: ease .7s slide-offcanvas reverse;
+}
+
+.OffcanvasExited {
+    display: none;
+}
+
+@keyframes slide-offcanvas {
+    0% {
+        transform: translateX(calc(var(--sidbar-offcanvas-widht) * -1));
+    }
+    100% {
+        transform: translateX(0);
+    }
 }

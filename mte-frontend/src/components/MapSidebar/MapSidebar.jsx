@@ -1,4 +1,4 @@
-import {useContext, useRef, useState} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 import classes from "./MapSidebar.module.css";
 import TrajectoryContext from "../../contexts/TrajectoryContext/TrajectoryContext.js";
 import {Button, OverlayTrigger, Tooltip} from "react-bootstrap";
@@ -10,12 +10,12 @@ import MapContext from "../../contexts/MapContext/MapContext.js";
 import SystemErrorLogger from "../../util/SystemErrorLogger.js";
 import InformationBlock from "./InformationBlock/InformationBlock.jsx";
 
-
 const MapSidebar = ({children}) => {
+
     const {currentTrajectoryExists} = useContext(TrajectoryContext);
 
     return (
-        <div className={classes.MapSidebar}>
+        <div className={classes.MapSidebar + " hud-element"}>
             <div className={classes.ButtonsPanel}>
                 {children}
             </div>
@@ -25,9 +25,16 @@ const MapSidebar = ({children}) => {
 };
 
 const TrajectoryOffcanvas = () => {
-    const {currentTrajectory} = useContext(TrajectoryContext);
+    const {currentTrajectory, currentTrajectoryExists} = useContext(TrajectoryContext);
 
-    const [visible, setVisible] = useState(currentTrajectory !== null);
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        if (currentTrajectoryExists()) {
+            setVisible(true);
+        }
+    }, [currentTrajectory]);
+
     const offcanvasRef = useRef();
 
     function switchHide() {
@@ -45,8 +52,12 @@ const TrajectoryOffcanvas = () => {
         <div className={classes.OffcanvasWrapper}>
             <CSSTransition
                 in={visible}
-                timeout={0}
-                unmountOnExit
+                timeout={500}
+                classNames={{
+                    enterActive: classes.OffcanvasEntering,
+                    exit: classes.OffcanvasExiting,
+                    exitDone: classes.OffcanvasExited
+                }}
                 mountOnEnter
             >
                 <div className={classes.Offcanvas} ref={offcanvasRef}>
@@ -54,6 +65,7 @@ const TrajectoryOffcanvas = () => {
                     <OffcanvasBody/>
                 </div>
             </CSSTransition>
+
 
             <OverlayTrigger
                 placement="right"

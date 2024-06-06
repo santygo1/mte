@@ -14,7 +14,7 @@ const EditToolsPanel = () => {
     } = useContext(TrajectoryContext);
 
     return (
-        <div className={classes.EditToolsPanel}>
+        <div className={classes.EditToolsPanel + " hud-element"}>
             {tools.map((t, i) => {
                 return (
                     <>
