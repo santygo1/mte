@@ -1,23 +1,16 @@
-import React, {memo, useRef, useState} from "react";
+import React, {memo, useContext, useRef} from "react";
 import {Polyline} from "react-leaflet";
 import L from 'leaflet';
-import Util from "../../../util/Util.js";
 import {EDIT_TRAJECTORY_HINT_OPTIONS, EDIT_TRAJECTORY_TRACK_OPTIONS} from "../../../util/TrajectoryOptions.js";
 import Coordinate from "../Coordinate/Coordinate.jsx";
+import EditTrajectoryContext from "../../../contexts/EditTrajectoryContext/EditTrajectoryContext.js";
 
-const EditableTrajectory = ({trajectoryObj, mapRef}) => {
-    const [trajectory, setTrajectory] = useState(Util.objectDeepCopy(trajectoryObj));
+const EditableTrajectory = ({trajectoryBeforeEdit, mapRef}) => {
+    const {editableTrajectory, changeCoordinate} = useContext(EditTrajectoryContext);
     const trackRef = useRef(null);
 
     function updateCoordinate(coordinateIndex, newCoord) {
-        setTrajectory({
-            ...trajectory, coordinates:
-                trajectory.coordinates.map((c, i) => i === coordinateIndex ? {
-                    ...c,
-                    lat: newCoord.lat,
-                    lon: newCoord.lng
-                } : c)
-        });
+        changeCoordinate(coordinateIndex, newCoord);
         deleteTrack();
     }
 
@@ -29,8 +22,8 @@ const EditableTrajectory = ({trajectoryObj, mapRef}) => {
         // Координаты участка, участок строится между
         // перемещенной координатой и ее соседними координатами
         const coordinates = [newCoord];
-        if (currentCoordinateIndex > 0) coordinates.unshift(trajectory.coordinates[currentCoordinateIndex - 1]);
-        if (currentCoordinateIndex < trajectory.coordinates.length - 1) coordinates.push(trajectory.coordinates[currentCoordinateIndex + 1]);
+        if (currentCoordinateIndex > 0) coordinates.unshift(editableTrajectory.coordinates[currentCoordinateIndex - 1]);
+        if (currentCoordinateIndex < editableTrajectory.coordinates.length - 1) coordinates.push(editableTrajectory.coordinates[currentCoordinateIndex + 1]);
 
         deleteTrack();
 
@@ -49,11 +42,11 @@ const EditableTrajectory = ({trajectoryObj, mapRef}) => {
 
     return (
         <>
-            <TrajectoryHint trajectory={trajectoryObj}/>
-            <Polyline positions={trajectory.coordinates}/>
-            {trajectory.coordinates.map((c, i) =>
+            <TrajectoryHint trajectory={trajectoryBeforeEdit}/>
+            <Polyline positions={editableTrajectory.coordinates}/>
+            {editableTrajectory.coordinates.map((c, i) =>
                 <Coordinate
-                    key={"editable-coord-" + trajectory.trajectoryId + ":" + c.lat + "-" + c.lon}
+                    key={"editable-coord-" + editableTrajectory.trajectoryId + ":" + c.lat + "-" + c.lon}
                     lat={c.lat}
                     lon={c.lon}
                     onDragEnd={(lat, lon) => updateCoordinate(i, lat, lon)}

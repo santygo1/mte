@@ -1,18 +1,25 @@
 .EditToolsPanel {
     left: 50%;
-    bottom: 20px;
+    top: 10px;
     transform: translate(-50%, 0);
     display: flex;
     gap: 5px;
-    padding: 5px 7px;
+    padding: 2px 7px;
     border-radius: 5px;
     background: var(--base-ui-bkg-color-light);
 }
 
 .EditToolsPanel > * {
-    width: 40px;
-    height: 40px;
     background: transparent !important;
     border: none !important;
     color: var(--base-ui-primary-color-light) !important;
+    transition: all .3s ease !important;
+}
+
+.EditToolsPanel > button:hover {
+    background: var(--base-ui-btn-hover-color-light) !important;
+}
+
+.EditToolsPanel > button:active {
+    background: var(--base-ui-btn-active-color-light) !important;
 }

@@ -2,8 +2,10 @@
 :root {
     --base-ui-primary-color-light: #1a73e8;
     --base-ui-bkg-color-light: #ffffff;
-    --base-ui-menu-btn-color-light: #70757a;
-    --base-ui-txt-color-light: #c5c5c5
+    --base-ui-btn-text-color-light: #70757a;
+    --base-ui-btn-hover-color-light: rgba(112, 117, 122, 0.25);
+    --base-ui-btn-active-color-light: rgba(112, 117, 122, 0.5);
+    --base-ui-txt-color-light: #c5c5c5;
 }
 
 * {

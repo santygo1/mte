@@ -17,7 +17,6 @@ const Map = () => {
         currentTrajectory,
         setCurrentTrajectory,
         isCurrentTrajectory,
-        currentTrajectoryExists
     } = useContext(TrajectoryContext);
 
 
@@ -68,7 +67,7 @@ const Map = () => {
                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
 
                 {isEditMode ?
-                    <EditableTrajectory trajectoryObj={currentTrajectory} mapRef={mapRef}/> :
+                    <EditableTrajectory trajectoryBeforeEdit={currentTrajectory} mapRef={mapRef}/> :
                     trajectories.map((t) =>
                         <Trajectory
                             key={t.trajectoryId}

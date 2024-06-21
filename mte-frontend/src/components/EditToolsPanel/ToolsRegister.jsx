@@ -1,5 +1,5 @@
-import EditNavigator from "./Tools/EditNavigator.jsx";
+import EditNavigator from "./Tools/EditNavigator/EditNavigator.jsx";
 
 export const tools = [
-    <EditNavigator/>
+    <EditNavigator key={"EditNavigatorTool"}/>,
 ]

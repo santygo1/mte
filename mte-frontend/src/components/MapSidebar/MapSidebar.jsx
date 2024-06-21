@@ -9,6 +9,7 @@ import {CSSTransition} from "react-transition-group";
 import MapContext from "../../contexts/MapContext/MapContext.js";
 import SystemErrorLogger from "../../util/SystemErrorLogger.js";
 import InformationBlock from "./InformationBlock/InformationBlock.jsx";
+import EditTrajectoryContext from "../../contexts/EditTrajectoryContext/EditTrajectoryContext.js";
 
 const MapSidebar = ({children}) => {
 
@@ -87,6 +88,7 @@ const OffcanvasBody = () => {
         isCurrentTrajectory,
         currentTrajectoryExists
     } = useContext(TrajectoryContext);
+    const {setEditableTrajectory} = useContext(EditTrajectoryContext);
 
     return (
         <div className={classes.OffcanvasBody}>
@@ -98,7 +100,7 @@ const OffcanvasBody = () => {
                     <CircleButton faIcon={faLocation} onClick={setViewMode}>Показать на карте</CircleButton>
                     <CircleButton faIcon={faMap} onClick={() => {
                         if (currentTrajectoryExists()) {
-                            setEditMode();
+                            setEditableTrajectory(currentTrajectory);
                         } else {
                             SystemErrorLogger.UnknownException("Режим редактирования недоступен: траектория не установлена");
                         }

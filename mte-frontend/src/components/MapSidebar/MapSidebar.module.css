@@ -47,7 +47,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: var(--base-ui-menu-btn-color-light);
+    color: var(--base-ui-btn-text-color-light);
     border-radius: 0;
     font-size: 14px;
 }
