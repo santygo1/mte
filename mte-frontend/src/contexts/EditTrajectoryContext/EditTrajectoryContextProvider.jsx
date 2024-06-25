@@ -2,12 +2,43 @@ import {useContext, useEffect, useState} from "react";
 import EditTrajectoryContext from "./EditTrajectoryContext.js";
 import Util from "../../util/Util.js";
 import MapContext from "../MapContext/MapContext.js";
+import {useToasts} from "react-bootstrap-toasts";
+import useFetch from "../../hooks/useFetch.js";
+import TrajectoryService from "../../api/service/TrajectoryService.js";
+
+const DEFAULT_TRAJECTORY_STATE_POOL = {
+    currentStatePosition: 0,
+    savedStatePosition: 0,
+    states: []
+};
+
 
 const EditTrajectoryContextProvider = ({children}) => {
-    const [trajectoryStatePool, setTrajectoryStatePool] = useState({
-        currentStatePosition: 0,
-        states: []
-    });
+    const [trajectoryStatePool, setTrajectoryStatePool] = useState(DEFAULT_TRAJECTORY_STATE_POOL);
+
+    const toasts = useToasts();
+
+    const [updateTrajectory, isUpdating, updateError] = useFetch(
+        async () => {
+            const trajectory = trajectoryStatePool.states[trajectoryStatePool.currentStatePosition];
+            const result = await TrajectoryService.updateTrajectory(trajectory.trajectoryId, trajectory);
+        }
+    );
+
+    useEffect(() => {
+        if (updateError) {
+            console.log(updateError)
+            toasts.show({
+                headerContent: <span className="me-auto">Сохранение ошибка</span>,
+                bodyContent: 'Сохранение завершено.',
+                toastProps: {
+                    className: "fade-in",
+                    autohide: true,
+                    delay: 3000,
+                },
+            });
+        }
+    }, [updateError]);
 
     const [navigatorComponentState, setNavigatorComponentState] = useState({
         hasPreviousState: false,
@@ -25,24 +56,23 @@ const EditTrajectoryContextProvider = ({children}) => {
         setNavigatorComponentState(newState);
     }, [trajectoryStatePool]);
 
-    const {setEditMode} = useContext(MapContext);
+    useEffect(() => {
 
+    }, []);
 
-    function clearChanges() {
-        if (navigatorComponentState.hasChanges) {
-            setTrajectoryStatePool({
-                currentStatePosition: 0,
-                states: [trajectoryStatePool.states[0]]
-            });
-        }
-    }
+    const {setEditMode, setViewMode} = useContext(MapContext);
 
     function setEditableTrajectoryClone(trajectory) {
-        setTrajectoryStatePool({currentStatePosition: 0, states: [Util.objectDeepCopy(trajectory)]});
+        setTrajectoryStatePool({
+            ...DEFAULT_TRAJECTORY_STATE_POOL,
+            states: [Util.objectDeepCopy(trajectory)]
+        });
         setEditMode();
     }
 
     function changeCoordinate(coordinatePosition, newCoordinate) {
+        // TODO: добавить проверку координаты
+
         // Вытягиваем из общего пула состояний, текущие состояния, т.е. те которые находятся от 0 до текущего выбранного
         const currentTrajectoryStates = trajectoryStatePool.states.slice(0, trajectoryStatePool.currentStatePosition + 1);
         // Глубоко копируем последнее состояние чтобы его изменить
@@ -90,12 +120,22 @@ const EditTrajectoryContextProvider = ({children}) => {
         }
     }
 
-    function saveNewTrajectory() {
+    function closeEdit() {
+        setViewMode();
+    }
 
+    function saveChanges() {
+        if (isUpdating) return;
+
+        setTrajectoryStatePool({
+            ...trajectoryStatePool,
+            savedStatePosition: trajectoryStatePool.currentStatePosition
+        });
+
+        updateTrajectory();
     }
 
     function checkCoordinate() {
-
     }
 
     return (
@@ -109,9 +149,14 @@ const EditTrajectoryContextProvider = ({children}) => {
                 hasNextState: navigatorComponentState.hasNextState,
                 hasPreviousState: navigatorComponentState.hasPreviousState,
                 hasChanges: navigatorComponentState.hasChanges,
-                clearChanges: clearChanges
+                closeEdit: closeEdit,
+                saveChanges: saveChanges,
+                needSave: trajectoryStatePool.savedStatePosition !== trajectoryStatePool.currentStatePosition && !isUpdating,
+                isSaving: !isUpdating
             }}
-        >{children}</EditTrajectoryContext.Provider>
+        >
+            {children}
+        </EditTrajectoryContext.Provider>
     );
 };
 export default EditTrajectoryContextProvider;

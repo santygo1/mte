@@ -14,7 +14,7 @@ const ToolButton = ({overlayText, children, ...props}) => {
             placement="bottom"
             //TODO: to prod
             //trigger="hover"
-            delay={{show: 1000, hide: 200}}
+            delay={{show: 500, hide: 200}}
             overlay={renderTooltip}
         >
             <Button {...props}>

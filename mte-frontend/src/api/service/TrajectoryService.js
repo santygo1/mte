@@ -13,7 +13,7 @@ export default class TrajectoryService {
     }
 
     static async updateTrajectory(id, trajectory) {
-        const response = await axios.put(`/api/v1/trajectories/${id}`, trajectory);
-        return response.status === 200;
+        const response = await axios.get(`/api/v1/trajectories/${id}123`);
+        return response.data;
     }
 }

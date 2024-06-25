@@ -3,11 +3,22 @@
     top: 10px;
     transform: translate(-50%, 0);
     display: flex;
-    gap: 5px;
-    padding: 2px 7px;
     border-radius: 5px;
     background: var(--base-ui-bkg-color-light);
 }
+
+.EditToolsPanel > *:first-child {
+    border-radius: 5px 0 0 5px;
+}
+
+.EditToolsPanel > *:last-child {
+    border-radius: 0 5px 5px 0;
+}
+
+.EditToolsPanel > * {
+    border-radius: 0 !important;
+}
+
 
 .EditToolsPanel > * {
     background: transparent !important;

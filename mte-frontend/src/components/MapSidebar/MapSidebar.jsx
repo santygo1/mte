@@ -20,7 +20,7 @@ const MapSidebar = ({children}) => {
             <div className={classes.ButtonsPanel}>
                 {children}
             </div>
-            {currentTrajectoryExists() && <TrajectoryOffcanvas/>}
+            {(currentTrajectoryExists() && <TrajectoryOffcanvas/>)}
         </div>
     );
 };

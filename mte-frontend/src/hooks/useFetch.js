@@ -9,7 +9,7 @@ export default function useFetch(callback) {
             setIsLoading(true);
             await callback();
         } catch (e) {
-            setError(error);
+            setError(e);
         } finally {
             setIsLoading(false);
         }

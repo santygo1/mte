@@ -10,5 +10,10 @@ export default createContext({
     hasNextState: false,
     hasPreviousState: false,
     hasChanges: false,
-    clearChanges: () => SystemErrorLogger.methodNotImplemented('EditTrajectoryContext', 'clearChanges'),
+
+    closeEdit: () => SystemErrorLogger.methodNotImplemented('EditTrajectoryContext', 'closeEdit'),
+
+    needSave: false,
+    isSaving: false,
+    saveChanges: () => SystemErrorLogger.methodNotImplemented('EditTrajectoryContext', 'saveChanges'),
 });
