@@ -10,10 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.danilspirin.mteapibase.application.aop.logging.LogExecutionTime;
 import ru.danilspirin.mteapibase.application.dto.TrajectoryDto;
 import ru.danilspirin.mteapibase.application.dto.requests.TrajectoryCreateRequest;
 import ru.danilspirin.mteapibase.application.dto.requests.TrajectoryUpdateRequest;
 import ru.danilspirin.mteapibase.application.dto.responses.TrajectoryResponse;
+import ru.danilspirin.mteapibase.application.exception.HttpExceptionHandler;
 import ru.danilspirin.mteapibase.application.exception.TrajectoryNotFound;
 import ru.danilspirin.mteapibase.application.service.TrajectoryService;
 import ru.danilspirin.mteapibase.application.converters.TrajectoryConverter;
@@ -75,6 +77,11 @@ public class TrajectoryController {
     ) {
         TrajectoryDto dto = trajectoryService.updateTrajectory(trajectoryId, trajectoryConverter.toDto(trajectoryUpdateRequest));
         TrajectoryResponse response = trajectoryConverter.toResponse(dto);
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return dto.isCreated() ?
                 ResponseEntity.created(
                                 ServletUriComponentsBuilder
@@ -93,4 +100,21 @@ public class TrajectoryController {
         return ResponseEntity.noContent().build();
     }
 
+    // Пользовательский запрос, проверки корректности новой координаты траектории
+    @PostMapping("/{trajectoryId}/checkCoordinate")
+    ResponseEntity<Void> checkNewCoordinateTrajectory(@PathVariable String trajectoryId){
+        // TODO: заглушка проверки координаты
+        String newTrajectoryId = trajectoryId + "1214";
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+//        TrajectoryDto trajectoryModel = trajectoryService
+//                .getTrajectoryById(newTrajectoryId)
+//                .orElseThrow(() -> new TrajectoryNotFound(newTrajectoryId));
+
+        return ResponseEntity.ok().build();
+    }
 }

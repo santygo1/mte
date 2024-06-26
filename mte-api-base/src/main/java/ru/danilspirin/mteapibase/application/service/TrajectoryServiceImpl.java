@@ -26,7 +26,7 @@ public class TrajectoryServiceImpl implements TrajectoryService {
     @Override
     public Optional<TrajectoryDto> getTrajectoryById(String id) {
         Optional<TrajectoryModel> trajectory = repository.findById(id);
-        return Optional.of(converter.toDto(trajectory.orElse(null)));
+        return Optional.ofNullable(converter.toDto(trajectory.orElse(null)));
     }
 
     @LogExecutionTime

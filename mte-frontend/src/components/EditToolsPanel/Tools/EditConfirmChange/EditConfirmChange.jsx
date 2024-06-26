@@ -6,6 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightFromBracket, faFloppyDisk} from "@fortawesome/free-solid-svg-icons";
 import ToolDelimiter from "../components/ToolDelimiter/ToolDelimiter.jsx";
 import Confirmation from "../../../Confirmation/Confirmation.jsx";
+import {Spinner} from "react-bootstrap";
 
 
 const EditConfirmChange = () => {
@@ -13,7 +14,9 @@ const EditConfirmChange = () => {
         editableTrajectory,
         needSave,
         saveChanges,
-        closeEdit
+        closeEdit,
+        isSaving,
+        canEdit: notCheckingCoordinate
     } = useContext(EditTrajectoryContext);
 
     const {isEditMode} = useContext(MapContext);
@@ -28,6 +31,16 @@ const EditConfirmChange = () => {
         closeEdit();
     }
 
+    function onExitClick() {
+        if (isSaving) return;
+
+        if (needSave || !notCheckingCoordinate) {
+            setShowCancelConfirmation(true);
+        } else {
+            exit();
+        }
+    }
+
     return (
         (isEditMode && editableTrajectory !== null) &&
         <>
@@ -35,13 +48,25 @@ const EditConfirmChange = () => {
             <ToolButton
                 overlayText={"Сохранить изменения"}
                 onClick={save}
-                disabled={!needSave}
-            ><FontAwesomeIcon icon={faFloppyDisk}/></ToolButton>
+                disabled={!needSave || isSaving}
+            >
+                {isSaving ?
+                    <Spinner animation="grow" variant={"primary"} size={"sm"}/>
+                    :
+                    <FontAwesomeIcon icon={faFloppyDisk}/>
+                }
+            </ToolButton>
+
             <ToolDelimiter/>
+
             <ToolButton
                 overlayText={"Выйти из режима редактирования"}
-                onClick={() => setShowCancelConfirmation(true)}
-            ><FontAwesomeIcon icon={faArrowRightFromBracket}/></ToolButton>
+                onClick={onExitClick}
+                disabled={isSaving}
+            >
+                <FontAwesomeIcon icon={faArrowRightFromBracket}/>
+            </ToolButton>
+
             {
                 showCancelConfirmation &&
                 <Confirmation

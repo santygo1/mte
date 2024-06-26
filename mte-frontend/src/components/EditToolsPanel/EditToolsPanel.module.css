@@ -7,6 +7,7 @@
     background: var(--base-ui-bkg-color-light);
 }
 
+
 .EditToolsPanel > *:first-child {
     border-radius: 5px 0 0 5px;
 }
@@ -18,7 +19,6 @@
 .EditToolsPanel > * {
     border-radius: 0 !important;
 }
-
 
 .EditToolsPanel > * {
     background: transparent !important;

@@ -10,6 +10,8 @@ const CoordinateMarker = forwardRef((props, ref) => {
         newprops.className = null;
     }
 
-    return <Marker ref={ref} icon={L.divIcon({className: className})} {...props} />
+    return <Marker ref={ref} icon={L.divIcon({className: className})} {...props}>
+        {props.children}
+    </Marker>
 });
 export default CoordinateMarker;

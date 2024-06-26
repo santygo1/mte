@@ -12,7 +12,7 @@ import TrajectoryContext from "../../contexts/TrajectoryContext/TrajectoryContex
 const Map = () => {
     const [trajectories, setTrajectories] = useState([]);
     const mapRef = useRef(null);
-    const {mode, setViewMode, setEditMode, isEditMode} = useContext(MapContext);
+    const {mode, setViewMode, setEditMode, isEditMode, isViewMode} = useContext(MapContext);
     const {
         currentTrajectory,
         setCurrentTrajectory,
@@ -27,8 +27,10 @@ const Map = () => {
         }
     );
     useEffect(() => {
-        fetchTrajectories()
-    }, []);
+        if (isViewMode) {
+            fetchTrajectories()
+        }
+    }, [isViewMode]);
 
 
     const tileRef = useRef();

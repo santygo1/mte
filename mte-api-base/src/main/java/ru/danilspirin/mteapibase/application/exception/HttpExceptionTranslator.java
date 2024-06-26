@@ -1,6 +1,7 @@
 package ru.danilspirin.mteapibase.application.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -25,6 +26,12 @@ public class HttpExceptionTranslator {
         List<FieldError> fieldErrors = result.getFieldErrors();
 
         return processFieldErrors(fieldErrors);
+    }
+
+    @ExceptionHandler(HttpExceptionHandler.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> processUserSpecifiedError(HttpExceptionHandler ex) {
+        return ResponseEntity.status(ex.getStatus()).body(new ErrorResponse(ex.getCode(), ex.getMessage()));
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

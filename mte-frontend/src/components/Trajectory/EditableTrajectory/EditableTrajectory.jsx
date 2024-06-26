@@ -1,13 +1,16 @@
-import React, {memo, useContext, useRef} from "react";
+import React, {memo, useContext, useEffect, useRef} from "react";
 import {Polyline} from "react-leaflet";
 import L from 'leaflet';
+import {antPath} from 'leaflet-ant-path';
 import {EDIT_TRAJECTORY_HINT_OPTIONS, EDIT_TRAJECTORY_TRACK_OPTIONS} from "../../../util/TrajectoryOptions.js";
 import Coordinate from "../Coordinate/Coordinate.jsx";
 import EditTrajectoryContext from "../../../contexts/EditTrajectoryContext/EditTrajectoryContext.js";
 
 const EditableTrajectory = ({trajectoryBeforeEdit, mapRef}) => {
-    const {editableTrajectory, changeCoordinate} = useContext(EditTrajectoryContext);
+    const {editableTrajectory, changeCoordinate, canEdit} = useContext(EditTrajectoryContext);
     const trackRef = useRef(null);
+    const polylineRef = useRef(null);
+    const antPolylineRef = useRef(null);
 
     function updateCoordinate(coordinateIndex, newCoord) {
         changeCoordinate(coordinateIndex, newCoord);
@@ -40,10 +43,37 @@ const EditableTrajectory = ({trajectoryBeforeEdit, mapRef}) => {
         }
     }
 
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map) return;
+
+        if (!canEdit) {
+            antPolylineRef.current = antPath(editableTrajectory.coordinates, {
+                "delay": 400,
+                "dashArray": [
+                    1,
+                    31
+                ],
+                "weight": 3,
+                "color": "#b3b3b3",
+                "pulseColor": "#4a4a4a",
+                "paused": false,
+                "reverse": false,
+                "hardwareAccelerated": true
+            });
+            antPolylineRef.current.addTo(map);
+        } else {
+            if (antPolylineRef.current !== null) {
+                antPolylineRef.current.removeFrom(map);
+                antPolylineRef.current = null;
+            }
+        }
+    }, [canEdit]);
+
     return (
         <>
             <TrajectoryHint trajectory={trajectoryBeforeEdit}/>
-            <Polyline positions={editableTrajectory.coordinates}/>
+            {canEdit && <Polyline ref={polylineRef} positions={editableTrajectory.coordinates}/>}
             {editableTrajectory.coordinates.map((c, i) =>
                 <Coordinate
                     key={"editable-coord-" + editableTrajectory.trajectoryId + ":" + c.lat + "-" + c.lon}
@@ -51,8 +81,8 @@ const EditableTrajectory = ({trajectoryBeforeEdit, mapRef}) => {
                     lon={c.lon}
                     onDragEnd={(lat, lon) => updateCoordinate(i, lat, lon)}
                     onDragging={(lat, lon) => printTrack(i, lat, lon)}
-                    draggable={true}
-                />)}
+                    draggable={canEdit}
+                ></Coordinate>)}
         </>
     );
 }

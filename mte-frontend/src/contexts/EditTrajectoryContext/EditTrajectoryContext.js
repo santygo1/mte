@@ -16,4 +16,5 @@ export default createContext({
     needSave: false,
     isSaving: false,
     saveChanges: () => SystemErrorLogger.methodNotImplemented('EditTrajectoryContext', 'saveChanges'),
+    canEdit: false
 });
