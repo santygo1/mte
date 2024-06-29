@@ -117,4 +117,13 @@ public class TrajectoryController {
 
         return ResponseEntity.ok().build();
     }
+
+
+    @PostMapping("/analyze")
+    ResponseEntity<List<AnalyzeTrajectoryResponse>> analyzeTrajectory(@RequestParam String method){
+
+        return null;
+    }
+
+
 }

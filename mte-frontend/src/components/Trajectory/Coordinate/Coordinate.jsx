@@ -28,7 +28,7 @@ const Coordinate = memo(({lat, lon, onDragEnd, onDragging, draggable = false}) =
         const marker = markerRef.current
         if (marker != null) {
             const {lat, lng} = marker.getLatLng();
-            return `${lat.toFixed(4)}°, ${lng.toFixed(4)}°`;
+            return `${lat}°, ${lng}°`;
         }
         return "";
     }

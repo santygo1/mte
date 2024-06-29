@@ -10,27 +10,14 @@ import SystemErrorLogger from "../../util/SystemErrorLogger.js";
 import TrajectoryContext from "../../contexts/TrajectoryContext/TrajectoryContext.js";
 
 const Map = () => {
-    const [trajectories, setTrajectories] = useState([]);
     const mapRef = useRef(null);
     const {mode, setViewMode, setEditMode, isEditMode, isViewMode} = useContext(MapContext);
     const {
         currentTrajectory,
         setCurrentTrajectory,
         isCurrentTrajectory,
+        trajectories
     } = useContext(TrajectoryContext);
-
-
-    const [fetchTrajectories, isTrajectoriesLoading, trajectoriesError] = useFetch(
-        async () => {
-            const fetch = await TrajectoryService.getAll();
-            setTrajectories(fetch);
-        }
-    );
-    useEffect(() => {
-        if (isViewMode) {
-            fetchTrajectories()
-        }
-    }, [isViewMode]);
 
 
     const tileRef = useRef();
