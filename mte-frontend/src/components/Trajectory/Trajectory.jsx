@@ -1,4 +1,4 @@
-import React, {memo, useRef} from 'react';
+import React, {memo, useContext, useRef} from 'react';
 import Coordinate from "./Coordinate/Coordinate.jsx";
 import {Polyline} from "react-leaflet";
 import {
@@ -6,12 +6,16 @@ import {
     HIGHLIGHTED_TRAJECTORY_OPTIONS,
     ONFOCUS_TRAJECTORY_WEIGHT
 } from "../../util/TrajectoryOptions.js";
+import AnalyzeTrajectoryContext from "../../contexts/AnalyzeTrajectoryContext/AnalyzeTrajectoryContext.js";
+import SegmentedPolyline from "./GradientPolyline/SegmentedPolyline.jsx";
 
 const Trajectory = memo(function Trajectory({
                                                 trajectoryObj,
                                                 isCurrentTrajectory,
                                                 setCurrentTrajectory
                                             }) {
+
+    const {isAnalyzeEnable} = useContext(AnalyzeTrajectoryContext);
 
     // В зависимости от выбрана траектория или нет устанавливаем определенные стили отображения
     let trajectoryOptions = DEFAULT_TRAJECTORY_OPTIONS;
@@ -38,17 +42,22 @@ const Trajectory = memo(function Trajectory({
 
     return (
         <>
-            <Polyline
-                ref={polylineRef}
-                positions={trajectoryObj.coordinates}
-                pathOptions={trajectoryOptions}
-                eventHandlers={{
-                    click: () => setCurrentTrajectory(trajectoryObj),
-                    mouseover: () => onHover(true),
-                    mouseout: () => onHover(false)
-                }}
-            >
-            </Polyline>
+            {
+                isAnalyzeEnable ?
+                    <SegmentedPolyline coordinates={trajectoryObj.coordinates}/> :
+
+                    <Polyline
+                        ref={polylineRef}
+                        positions={trajectoryObj.coordinates}
+                        pathOptions={trajectoryOptions}
+                        eventHandlers={{
+                            click: () => setCurrentTrajectory(trajectoryObj),
+                            mouseover: () => onHover(true),
+                            mouseout: () => onHover(false)
+                        }}
+                    />
+            }
+
             {isCurrentTrajectory && trajectoryObj.coordinates.map((c) =>
                 <Coordinate
                     key={"coord-" + trajectoryObj.trajectoryId + ":" + c.lat + "-" + c.lon}

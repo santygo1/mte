@@ -1,10 +1,12 @@
 package ru.danilspirin.mteapibase.application.dto.requests;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
+@JsonIgnoreProperties(value = "color")
 public class CoordinateRequest {
 
     @NotNull

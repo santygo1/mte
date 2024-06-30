@@ -8,6 +8,8 @@ import EditableTrajectory from "../Trajectory/EditableTrajectory/EditableTraject
 import MapContext from "../../contexts/MapContext/MapContext.js";
 import SystemErrorLogger from "../../util/SystemErrorLogger.js";
 import TrajectoryContext from "../../contexts/TrajectoryContext/TrajectoryContext.js";
+import SegmentedPolyline from "../Trajectory/GradientPolyline/SegmentedPolyline.jsx";
+import HotlinePolyline from "../Trajectory/GradientPolyline/SegmentedPolyline.jsx";
 
 const Map = () => {
     const mapRef = useRef(null);
@@ -49,11 +51,13 @@ const Map = () => {
         }
     }, [mode]);
 
+
     return (
         <>
             <MapContainer ref={mapRef} className={classes.Map} center={[43.0678, 131.893]} zoom={13}>
                 <TileLayer ref={tileRef} continuousWorld={true}
                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+                
 
                 {isEditMode ?
                     <EditableTrajectory trajectoryBeforeEdit={currentTrajectory} mapRef={mapRef}/> :

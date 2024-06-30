@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MainAreaAnalyzer implements Analyzer {
+public class AnalyzerImpl implements Analyzer {
 
-    private static final double CLUSTER_RADIUS_KM = 0.1;
-    private static final int CLUSTER_CRITICAL_TRAJECTORIES_COUNT = 3;
+    private static final double CLUSTER_RADIUS_KM = 0.01;
+    private static final int CLUSTER_CRITICAL_TRAJECTORIES_COUNT = 4;
     private static final int CLUSTER_WARNING_PERCENT = 75;
 
     public List<AnalyzedTrajectory> analyze(List<TrajectoryModel> trajectoryModels) {
