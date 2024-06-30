@@ -3,6 +3,8 @@ import Map from "../../components/Map/Map.jsx";
 import MapContextProvider from "../../contexts/MapContext/MapContextProvider.jsx";
 import MapHUD from "../components/MapHUD/MapHUD.jsx";
 import EditTrajectoryContextProvider from "../../contexts/EditTrajectoryContext/EditTrajectoryContextProvider.jsx";
+import AnalyzeTrajectoryContextProvider
+    from "../../contexts/AnalyzeTrajectoryContext/AnalyzeTrajectoryContextProvider.jsx";
 
 const MapPage = () => {
     return (
@@ -10,8 +12,10 @@ const MapPage = () => {
             <MapContextProvider>
                 <TrajectoryContextProvider>
                     <EditTrajectoryContextProvider>
-                        <MapHUD/>
-                        <Map/>
+                        <AnalyzeTrajectoryContextProvider>
+                            <MapHUD/>
+                            <Map/>
+                        </AnalyzeTrajectoryContextProvider>
                     </EditTrajectoryContextProvider>
                 </TrajectoryContextProvider>
             </MapContextProvider>

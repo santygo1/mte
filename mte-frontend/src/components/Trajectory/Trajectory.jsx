@@ -36,7 +36,6 @@ const Trajectory = memo(function Trajectory({
         }
     }
 
-    console.log(`rerender ${trajectoryObj.trajectoryId} at ${new Date().toLocaleTimeString()}`);
     return (
         <>
             <Polyline

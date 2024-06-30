@@ -5,6 +5,8 @@ export default createContext({
     currentTrajectory: null,
     trajectories: null,
     setCurrentTrajectory: () => SystemErrorLogger.methodNotImplemented('TrajectoryContext', 'setCurrentTrajectory'),
+    setTrajectories: () => SystemErrorLogger.methodNotImplemented("TrajectoryContext", "setTrajectories"),
+
     isCurrentTrajectory: (trajectory) => {
         SystemErrorLogger.methodNotImplemented('TrajectoryContext', 'isCurrentTrajectory');
         return false;
