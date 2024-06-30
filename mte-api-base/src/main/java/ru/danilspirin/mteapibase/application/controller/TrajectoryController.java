@@ -6,19 +6,20 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.danilspirin.mteapibase.application.aop.logging.LogExecutionTime;
+import ru.danilspirin.mteapibase.application.converters.AnalyzeTrajectoryConverter;
+import ru.danilspirin.mteapibase.application.converters.TrajectoryConverter;
+import ru.danilspirin.mteapibase.application.dto.AnalyzedTrajectoryDto;
 import ru.danilspirin.mteapibase.application.dto.TrajectoryDto;
 import ru.danilspirin.mteapibase.application.dto.requests.TrajectoryCreateRequest;
 import ru.danilspirin.mteapibase.application.dto.requests.TrajectoryUpdateRequest;
+import ru.danilspirin.mteapibase.application.dto.responses.AnalyzedTrajectoryResponse;
 import ru.danilspirin.mteapibase.application.dto.responses.TrajectoryResponse;
-import ru.danilspirin.mteapibase.application.exception.HttpExceptionHandler;
 import ru.danilspirin.mteapibase.application.exception.TrajectoryNotFound;
 import ru.danilspirin.mteapibase.application.service.TrajectoryService;
-import ru.danilspirin.mteapibase.application.converters.TrajectoryConverter;
+import ru.danilspirin.mteapibase.application.service.trajectoryAnalyze.AnalyzeTrajectoryService;
 
 import java.util.List;
 
@@ -30,7 +31,10 @@ import java.util.List;
 public class TrajectoryController {
 
     TrajectoryService trajectoryService;
+    AnalyzeTrajectoryService analyzeTrajectoryService;
+
     TrajectoryConverter trajectoryConverter;
+    AnalyzeTrajectoryConverter analyzeTrajectoryConverter;
 
     @GetMapping
     ResponseEntity<List<TrajectoryResponse>> getAll() {
@@ -102,7 +106,7 @@ public class TrajectoryController {
 
     // Пользовательский запрос, проверки корректности новой координаты траектории
     @PostMapping("/{trajectoryId}/checkCoordinate")
-    ResponseEntity<Void> checkNewCoordinateTrajectory(@PathVariable String trajectoryId){
+    ResponseEntity<Void> checkNewCoordinateTrajectory(@PathVariable String trajectoryId) {
         // TODO: заглушка проверки координаты
         String newTrajectoryId = trajectoryId + "1214";
         try {
@@ -115,15 +119,20 @@ public class TrajectoryController {
 //                .getTrajectoryById(newTrajectoryId)
 //                .orElseThrow(() -> new TrajectoryNotFound(newTrajectoryId));
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity
+                .ok().build();
     }
 
 
     @PostMapping("/analyze")
-    ResponseEntity<List<AnalyzeTrajectoryResponse>> analyzeTrajectory(@RequestParam String method){
-
-        return null;
+    ResponseEntity<List<AnalyzedTrajectoryResponse>> analyzeTrajectory(@RequestParam String method) {
+        List<AnalyzedTrajectoryDto> analyzeResult = analyzeTrajectoryService.analyzeAllTrajectories(method);
+        return ResponseEntity
+                .ok(
+                        analyzeResult.stream()
+                                .map(analyzeTrajectoryConverter::toResponse)
+                                .toList()
+                );
     }
-
 
 }
