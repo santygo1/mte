@@ -18,7 +18,7 @@ export default class TrajectoryAnalyzeService {
             t.coordinates = currentResult.coordinates.map(c => {
                 const result = currentResult.coordinates.find(rc => c.lat === rc.lat && c.lon === rc.lon);
                 if (result != null) {
-                    c.color = result.color;
+                    c.intensity = result.intensity;
                 }
                 return c;
             });

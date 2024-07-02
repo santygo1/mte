@@ -1,9 +1,28 @@
 import {Polyline} from "react-leaflet";
+import * as d3 from 'd3';
 
-const SegmentedPolyline = ({coordinates}) => {
+const AnalyzedTrajectoryPolyline = ({coordinates}) => {
     // Проверяем, есть ли хотя бы две точки для построения градиента
     if (coordinates.length < 2) {
         return null;
+    }
+
+    function getGreenRedGradient(intensity) {
+        if (intensity < 0.5) {
+            // Создаем шкалу для зеленого-черного
+            const greenBlackScale = d3.scaleLinear()
+                .domain([0, 0.5])
+                .range(['#2cfa02', '#e5fa02']);
+
+            return greenBlackScale(intensity);
+        } else {
+            // Создаем шкалу для черного-красного
+            const blackRedScale = d3.scaleLinear()
+                .domain([0.5, 1])
+                .range(['#e5fa02', '#fa023c']);
+
+            return blackRedScale(intensity);
+        }
     }
 
     // Делим траекторию на сегменты, каждый из которых будет отрисован своим цветом
@@ -12,24 +31,24 @@ const SegmentedPolyline = ({coordinates}) => {
             acc.push({
                 from: coordinates[idx],
                 to: middleCoordinate(coordinates[idx], coordinates[idx + 1]),
-                color: coordinates[idx].color
+                color: getGreenRedGradient(coordinates[idx].intensity)
             })
         } else if (idx === coordinates.length - 1) {
             acc.push({
                 from: middleCoordinate(coordinates[idx - 1], coordinates[idx]),
                 to: coordinates[idx],
-                color: coordinates[idx].color
+                color: getGreenRedGradient(coordinates[idx].intensity)
             })
         } else {
             acc.push({
                 from: middleCoordinate(coordinates[idx - 1], coordinates[idx]),
                 to: coordinates[idx],
-                color: coordinates[idx].color
+                color: getGreenRedGradient(coordinates[idx].intensity)
             })
             acc.push({
                 from: coordinates[idx],
                 to: middleCoordinate(coordinates[idx], coordinates[idx + 1]),
-                color: coordinates[idx].color
+                color: getGreenRedGradient(coordinates[idx].intensity)
             })
         }
         return acc;
@@ -71,4 +90,4 @@ const SegmentedPolyline = ({coordinates}) => {
     );
 };
 
-export default SegmentedPolyline;
+export default AnalyzedTrajectoryPolyline;

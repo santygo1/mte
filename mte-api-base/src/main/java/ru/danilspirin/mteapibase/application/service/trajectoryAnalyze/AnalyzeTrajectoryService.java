@@ -9,7 +9,6 @@ import ru.danilspirin.mteapibase.application.converters.AnalyzeTrajectoryConvert
 import ru.danilspirin.mteapibase.application.dto.AnalyzedTrajectoryDto;
 import ru.danilspirin.mteapibase.application.model.AnalyzedTrajectory;
 import ru.danilspirin.mteapibase.application.repository.TrajectoryRepository;
-import ru.danilspirin.mteapibase.application.service.trajectoryAnalyze.analyzers.Analyzer;
 
 import java.util.List;
 
@@ -18,13 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AnalyzeTrajectoryService {
 
-    AnalyzerFactory factory = new AnalyzerFactory();
     TrajectoryRepository repository;
     AnalyzeTrajectoryConverter converter;
 
+
     @LogExecutionTime
     public List<AnalyzedTrajectoryDto> analyzeAllTrajectories(String method) {
-        Analyzer analyzer = factory.getAnalyzerByMethod(AnalyzeMethod.getMethodByName(method));
+        Analyzer analyzer = new JTSAnalyzerImpl(0.1, 500);
         List<AnalyzedTrajectory> analyzedTrajectories = analyzer.analyze(repository.findAll());
 
         return analyzedTrajectories.stream()

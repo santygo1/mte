@@ -7,7 +7,7 @@ import {
     ONFOCUS_TRAJECTORY_WEIGHT
 } from "../../util/TrajectoryOptions.js";
 import AnalyzeTrajectoryContext from "../../contexts/AnalyzeTrajectoryContext/AnalyzeTrajectoryContext.js";
-import SegmentedPolyline from "./GradientPolyline/SegmentedPolyline.jsx";
+import AnalyzedTrajectoryPolyline from "./GradientPolyline/AnalyzedTrajectoryPolyline.jsx";
 
 const Trajectory = memo(function Trajectory({
                                                 trajectoryObj,
@@ -44,7 +44,7 @@ const Trajectory = memo(function Trajectory({
         <>
             {
                 isAnalyzeEnable ?
-                    <SegmentedPolyline coordinates={trajectoryObj.coordinates}/> :
+                    <AnalyzedTrajectoryPolyline coordinates={trajectoryObj.coordinates}/> :
 
                     <Polyline
                         ref={polylineRef}

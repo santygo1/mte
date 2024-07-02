@@ -10,5 +10,5 @@ import lombok.experimental.FieldDefaults;
 public class AnalyzedCoordinateDto {
     double lat;
     double lon;
-    String color;
+    double intensity;
 }

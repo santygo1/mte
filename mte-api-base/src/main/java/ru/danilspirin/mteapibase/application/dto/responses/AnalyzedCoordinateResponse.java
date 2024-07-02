@@ -6,5 +6,5 @@ import lombok.Data;
 public class AnalyzedCoordinateResponse {
     double lat;
     double lon;
-    String color;
+    double intensity;
 }

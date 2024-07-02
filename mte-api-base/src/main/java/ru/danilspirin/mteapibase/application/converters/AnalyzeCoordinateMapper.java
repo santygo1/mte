@@ -15,13 +15,6 @@ interface AnalyzeCoordinateMapper {
 
     AnalyzedCoordinateResponse toResponse(AnalyzedCoordinateDto dto);
 
-    default AnalyzedCoordinateDto toDto(AnalyzedCoordinate model){
-        AnalyzedCoordinateDto dto = new AnalyzedCoordinateDto();
-        dto.setLat(model.getLat());
-        dto.setLon(model.getLon());
-        dto.setColor(model.getIntensity().getColor());
-
-        return dto;
-    };
+    AnalyzedCoordinateDto toDto(AnalyzedCoordinate model);
 
 }
