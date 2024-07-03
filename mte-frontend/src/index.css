@@ -46,3 +46,17 @@ hr {
     }
 }
 
+
+.flag {
+    width: 30px;
+    height: 20px;
+    border: 3px solid black;
+
+}
+
+.centered {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+

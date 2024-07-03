@@ -88,10 +88,14 @@
 .OffcanvasHeader {
     height: 160px;
     background: #2730f8;
+    display: flex;
 }
 
-.Offcanvas > .OffcanvasBody,
-.Offcanvas > .OffcanvasHeader {
+.Offcanvas .Vessel {
+    width: 100%;
+}
+
+.Offcanvas > .OffcanvasBody {
     padding: 10px;
 }
 

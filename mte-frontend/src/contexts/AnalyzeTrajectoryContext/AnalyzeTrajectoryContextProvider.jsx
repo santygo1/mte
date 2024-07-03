@@ -11,10 +11,16 @@ const AnalyzeTrajectoryContextProvider = ({children}) => {
     const toasts = useToasts();
     const [analyzeResult, setAnalyzeResult] = useState(null);
     const [currentToastId, setCurrentToastId] = useState(null);
+    const [currentAnalyzeParameters, setCurrentAnalyzeParameters] = useState({
+        radius: 0.1,
+        interpolation: false,
+        dateFrom: "",
+        dateTo: ""
+    });
 
     const [fetchAnalyzeResult, isResultLoading, resultError] = useFetch(
         async () => {
-            const fetch = await TrajectoryAnalyzeService.getAnalyze();
+            const fetch = await TrajectoryAnalyzeService.getAnalyze(currentAnalyzeParameters);
             applyAnalyzeResult(fetch);
         }
     );
@@ -56,7 +62,7 @@ const AnalyzeTrajectoryContextProvider = ({children}) => {
 
 
     function doAnalyze() {
-        console.log('Анализ')
+        console.log(currentAnalyzeParameters)
         fetchAnalyzeResult();
     }
 
@@ -67,6 +73,11 @@ const AnalyzeTrajectoryContextProvider = ({children}) => {
         return result;
     }
 
+    function disableAnalyze() {
+        setIsEnable(false);
+        setAnalyzeResult(null);
+    }
+
     return (
         <AnalyzeTrajectoryContext.Provider
             value={{
@@ -74,7 +85,10 @@ const AnalyzeTrajectoryContextProvider = ({children}) => {
                 isAnalyzeProcessing: isResultLoading,
                 analyzeResult: analyzeResult,
                 doAnalyze: doAnalyze,
-                getTrajectoryAnalyze: getTrajectoryAnalyze
+                getTrajectoryAnalyze: getTrajectoryAnalyze,
+                disableAnalyze: disableAnalyze,
+                setParams: setCurrentAnalyzeParameters,
+                params: currentAnalyzeParameters
             }}
         >
             {children}

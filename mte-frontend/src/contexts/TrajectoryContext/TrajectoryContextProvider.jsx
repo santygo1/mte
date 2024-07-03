@@ -23,7 +23,6 @@ const TrajectoryContextProvider = ({children}) => {
     }, [isViewMode]);
 
     useEffect(() => {
-        console.log(trajectories);
         if (currentTrajectory !== null) {
             setCurrentTrajectory(trajectories.filter((i) => i.trajectoryId === currentTrajectory.trajectoryId)[0]);
         }

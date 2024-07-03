@@ -1,16 +1,11 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import classes from "./Map.module.css";
 import {MapContainer, TileLayer} from "react-leaflet";
-import TrajectoryService from "../../api/service/TrajectoryService.js";
-import useFetch from "../../hooks/useFetch.js";
 import Trajectory from "../Trajectory/Trajectory.jsx";
 import EditableTrajectory from "../Trajectory/EditableTrajectory/EditableTrajectory.jsx";
 import MapContext from "../../contexts/MapContext/MapContext.js";
 import SystemErrorLogger from "../../util/SystemErrorLogger.js";
 import TrajectoryContext from "../../contexts/TrajectoryContext/TrajectoryContext.js";
-import AnalyzedTrajectoryPolyline from "../Trajectory/GradientPolyline/AnalyzedTrajectoryPolyline.jsx";
-import HotlinePolyline from "../Trajectory/GradientPolyline/AnalyzedTrajectoryPolyline.jsx";
-import AnalyzeTrajectoryContext from "../../contexts/AnalyzeTrajectoryContext/AnalyzeTrajectoryContext.js";
 
 const Map = () => {
     const mapRef = useRef(null);
@@ -25,19 +20,24 @@ const Map = () => {
 
     const tileRef = useRef();
     // Переводит траекторию в фокус при изменении
-    useEffect(function flyToCurrentTrajectoryWhenEdit() {
+    useEffect(() => {
+        if (isEditMode) {
+            flyToCurrentTrajectoryWhenEdit();
+        }
+    }, [mode]);
+
+    function flyToCurrentTrajectoryWhenEdit() {
         const map = mapRef.current;
         if (!map) return;
         if (!isEditMode) return;
 
         const bounds = L.latLngBounds(currentTrajectory.coordinates);
         map.flyToBounds(bounds, {
-            duration: 1, // Длительность анимации в секундах
+            duration: 0.5, // Длительность анимации в секундах
             easeLinearity: 0.5, // Линейность анимации (0 = без линейности, 1 = полная линейность)
             paddingTopLeft: [444, 0], // TODO: Исправить хардкод(нужен потому что при появлении траектории открывается offcanvas, 444 - ширина панели кнопок + ширина offcanvas)
         });
-    }, [mode]);
-
+    }
 
     useEffect(function changeTileClassName() {
         const tilePane = document.querySelector(".leaflet-pane .leaflet-tile-pane");
