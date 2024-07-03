@@ -2,8 +2,12 @@ package ru.danilspirin.mteapibase.application.model;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.math3.ml.clustering.Clusterable;
+import ru.danilspirin.mteapibase.application.utils.TimeUtil;
+
+import java.sql.Timestamp;
 
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -16,35 +20,39 @@ public class AnalyzedCoordinate implements Clusterable {
     @Getter
     private double lon;
 
+    @Getter
+    private Timestamp timestamp;
+
     //переменные участвующие в расчете интенсивности координаты
-    private double intensitySum = 0;
-    private double intensityCount = 0;
+    @Getter
+    @Setter
+    private int intensityCount = 0;
+    @Getter
+    @Setter
+    private int maxCount = 0;
 
 
-    AnalyzedCoordinate(double lat, double lon, String trajectoryId) {
+    AnalyzedCoordinate(double lat, double lon, String trajectoryId, Timestamp timestamp) {
         this.lat = lat;
         this.lon = lon;
         this.trajectoryId = trajectoryId;
+        this.timestamp = timestamp;
     }
 
 
     protected static AnalyzedCoordinate fromCoordinate(String trajectoryId, CoordinateModel model) {
-        AnalyzedCoordinate analyzedCoordinate = new AnalyzedCoordinate(model.lat(), model.lon(), trajectoryId);
-        analyzedCoordinate.lat = model.lat();
-        analyzedCoordinate.lon = model.lon();
-        analyzedCoordinate.trajectoryId = trajectoryId;
-
-        return analyzedCoordinate;
+        return new AnalyzedCoordinate(
+                model.lat(),
+                model.lon(),
+                trajectoryId,
+                TimeUtil.fromStringToTimestamp(model.timestamp()
+                ));
     }
 
-    public void addIntensityValue(double intensityValue) {
-        intensitySum += intensityValue;
-        intensityCount++;
-    }
 
     public double getIntensity() {
-        if (intensityCount == 0) return 0;
-        return intensitySum / intensityCount;
+        if (maxCount == 0) return 0;
+        return (double) intensityCount / maxCount;
     }
 
     @Override
@@ -58,4 +66,9 @@ public class AnalyzedCoordinate implements Clusterable {
     public double[] getPoint() {
         return new double[]{lat, lon};
     }
+
+    public long getTimestampInMillis() {
+        return timestamp.getTime();
+    }
+
 }

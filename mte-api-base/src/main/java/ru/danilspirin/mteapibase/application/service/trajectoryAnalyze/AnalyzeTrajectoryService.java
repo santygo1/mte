@@ -23,7 +23,7 @@ public class AnalyzeTrajectoryService {
 
     @LogExecutionTime
     public List<AnalyzedTrajectoryDto> analyzeAllTrajectories(String method) {
-        Analyzer analyzer = new JTSAnalyzerImpl(0.1, 500);
+        Analyzer analyzer = new JTSAnalyzerImpl(0.4, 100);
         List<AnalyzedTrajectory> analyzedTrajectories = analyzer.analyze(repository.findAll());
 
         return analyzedTrajectories.stream()

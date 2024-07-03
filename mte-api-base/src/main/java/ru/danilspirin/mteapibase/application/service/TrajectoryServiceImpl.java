@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import ru.danilspirin.mteapibase.application.aop.logging.LogExecutionTime;
 import ru.danilspirin.mteapibase.application.converters.TrajectoryConverter;
 import ru.danilspirin.mteapibase.application.dto.TrajectoryDto;
+import ru.danilspirin.mteapibase.application.exception.TimeConvertError;
 import ru.danilspirin.mteapibase.application.model.TrajectoryModel;
 import ru.danilspirin.mteapibase.application.repository.TrajectoryRepository;
+import ru.danilspirin.mteapibase.application.utils.TimeUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +41,16 @@ public class TrajectoryServiceImpl implements TrajectoryService {
 
     @Override
     public TrajectoryDto addTrajectory(TrajectoryDto trajectory) {
+        // TODO: колхоз стайл, время жмет и очко тоже ;-)
+        trajectory.getCoordinates().forEach(p -> {
+            String tried = p.getTimestamp();
+            try {
+                TimeUtil.fromTimestampToString(TimeUtil.fromStringToTimestamp(tried));
+            } catch (Exception e) {
+                throw new TimeConvertError(tried);
+            }
+        });
+
         return converter.toDto(repository.save(converter.toModel(trajectory)));
     }
 

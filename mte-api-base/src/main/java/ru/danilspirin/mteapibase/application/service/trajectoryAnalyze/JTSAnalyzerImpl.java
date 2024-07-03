@@ -1,19 +1,19 @@
 package ru.danilspirin.mteapibase.application.service.trajectoryAnalyze;
 
-import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.impl.CoordinateArraySequence;
 import org.locationtech.jts.operation.buffer.BufferParameters;
-import org.locationtech.jts.operation.distance.DistanceOp;
+import ru.danilspirin.mteapibase.application.model.AnalyzedCoordinate;
 import ru.danilspirin.mteapibase.application.model.AnalyzedTrajectory;
 import ru.danilspirin.mteapibase.application.model.TrajectoryModel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class JTSAnalyzerImpl implements Analyzer {
     private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
     private static final double EARTH_RADIUS_KM = 6371; // радиус Земли в км
+    private  Predicate<AnalyzedCoordinate> coordinatePredicate = (_) -> true;
 
     private final double bufferRadiusInKm;
     private final int resultInterpolation;
@@ -26,8 +26,11 @@ public class JTSAnalyzerImpl implements Analyzer {
     @Override
     public List<AnalyzedTrajectory> analyze(List<TrajectoryModel> trajectoryModels) {
         List<AnalyzedTrajectory> trajectories = trajectoryModels.stream().map(AnalyzedTrajectory::fromTrajectory).toList();
+
+        if (!(trajectories.size() > 1)) return trajectories;
+
         if (resultInterpolation != 0) {
-            trajectories = trajectories.stream().map(t -> t.interpolate(500)).toList();
+            trajectories = trajectories.stream().map(t -> t.interpolate(resultInterpolation)).toList();
         }
 
         // Создаем буферы для каждой траектории
@@ -45,8 +48,9 @@ public class JTSAnalyzerImpl implements Analyzer {
             buffers.add(buffer);
         }
 
+
         // Находим пересечения между буферными зонами
-        List<Geometry> intersections = new ArrayList<>();
+        Set<Geometry> intersections = new HashSet<>();
         for (int i = 0; i < buffers.size(); i++) {
             for (int j = i + 1; j < buffers.size(); j++) {
                 Geometry intersection = buffers.get(i).intersection(buffers.get(j));
@@ -56,25 +60,29 @@ public class JTSAnalyzerImpl implements Analyzer {
             }
         }
 
-        // Покрасим точки, которые пересекаются с какой-либо другой траекторией
+        int maxCount = intersections.size();
         trajectories.stream().flatMap(t -> t.getCoordinates().stream())
+                .filter(coordinatePredicate)
                 .forEach(c -> {
                     Point point = GEOMETRY_FACTORY.createPoint(new Coordinate(c.getLon(), c.getLat()));
-                    for (Geometry intersection : intersections){
+                    c.setMaxCount(maxCount);
+                    for (Geometry intersection : intersections) {
                         if (intersection.intersects(point)) {
-                            double distance = DistanceOp.distance(point, intersection.getCentroid());
-                            Envelope envelope = intersection.getEnvelopeInternal();
-                            double maxDistance = Math.sqrt(Math.pow(envelope.getMaxX() - envelope.getMinX(), 2) +
-                                    Math.pow(envelope.getMaxY() - envelope.getMinY(), 2));
-
-                            double normalizedDistance = 1.0 - distance / maxDistance;
-
-                            c.addIntensityValue(normalizedDistance);
+                            c.setIntensityCount(c.getIntensityCount() + 1);
                         }
                     }
                 });
+
         return trajectories;
     }
 
+    /**
+     * @param coordinatePredicate - фильтр анализируемых координат, если исключаются, анализ к координате не применяется
+     */
+    @Override
+    public JTSAnalyzerImpl withCoordinateFilter(Predicate<AnalyzedCoordinate> coordinatePredicate) {
+        this.coordinatePredicate = coordinatePredicate;
+        return this;
+    }
 
 }

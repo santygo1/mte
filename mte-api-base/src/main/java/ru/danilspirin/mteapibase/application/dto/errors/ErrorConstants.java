@@ -7,6 +7,7 @@ public final class ErrorConstants {
     public static final String ERR_INTERNAL_SERVER_ERROR = "error.internalServerError";
     public static final String ERR_TRAJECTORY_NOT_FOUND = "error.ERR_TRAJECTORY_NOT_FOUND";
     public static final String ERR_ANALYZE_METHOD_NOT_SUPPORTED = "error.unsupportedAnalyzeMethod";
+    public static final String ERR_WRONG_DATE_FORMAT = "error.wrongDateFormat";
 
     private ErrorConstants() {
     }

@@ -6,6 +6,7 @@ import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 import ru.danilspirin.mteapibase.application.utils.GeographicCoordinatesDistance;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,13 +51,16 @@ public class AnalyzedTrajectory {
         double[] xValues = arcLengths; //  Теперь X - это суммарная длина дуги
         double[] latitudes = coordinates.stream().mapToDouble(AnalyzedCoordinate::getLat).toArray();
         double[] longitudes = coordinates.stream().mapToDouble(AnalyzedCoordinate::getLon).toArray();
+        //  Добавляем время в качестве дополнительного массива
+        double[] timestamps = coordinates.stream().mapToLong(AnalyzedCoordinate::getTimestampInMillis).mapToDouble(l -> l).toArray();
 
         // Создаем интерполятор сплайнов
         SplineInterpolator interpolator = new SplineInterpolator();
 
-        // Выполняем интерполяцию для широт и долгот
+        // Выполняем интерполяцию для широт, долгот и времени
         PolynomialSplineFunction latitudeSpline = interpolator.interpolate(xValues, latitudes);
         PolynomialSplineFunction longitudeSpline = interpolator.interpolate(xValues, longitudes);
+        PolynomialSplineFunction timestampSpline = interpolator.interpolate(xValues, timestamps); // Интерполяция времени
 
         // Генерируем интерполированные координаты
         List<AnalyzedCoordinate> interpolatedCoordinates = new ArrayList<>();
@@ -65,8 +69,14 @@ public class AnalyzedTrajectory {
             double x = totalArcLength * i / (interpolationPoints - 1); //  Рассчитываем X для каждой точки
             double interpolatedLatitude = latitudeSpline.value(x);
             double interpolatedLongitude = longitudeSpline.value(x);
+            //  Интерполируем время
+            long interpolatedTimestampInMillis = (long) timestampSpline.value(x);
 
-            interpolatedCoordinates.add(new AnalyzedCoordinate(interpolatedLatitude, interpolatedLongitude, this.trajectoryId));
+            interpolatedCoordinates.add(new AnalyzedCoordinate(
+                    interpolatedLatitude,
+                    interpolatedLongitude,
+                    this.trajectoryId,
+                    new Timestamp(interpolatedTimestampInMillis)));
         }
 
         this.coordinates = interpolatedCoordinates;
