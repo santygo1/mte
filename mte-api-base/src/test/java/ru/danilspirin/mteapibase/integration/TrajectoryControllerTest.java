@@ -10,8 +10,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import ru.danilspirin.mteapibase.application.model.CoordinateModel;
-import ru.danilspirin.mteapibase.application.model.TrajectoryModel;
+import ru.danilspirin.mteapibase.application.model.trajectory.CoordinateModel;
+import ru.danilspirin.mteapibase.application.model.trajectory.TrajectoryModel;
 import ru.danilspirin.mteapibase.application.repository.TrajectoryRepository;
 
 import java.sql.Timestamp;

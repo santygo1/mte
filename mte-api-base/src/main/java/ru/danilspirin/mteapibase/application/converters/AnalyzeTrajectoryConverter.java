@@ -5,7 +5,7 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 import ru.danilspirin.mteapibase.application.dto.AnalyzedTrajectoryDto;
 import ru.danilspirin.mteapibase.application.dto.responses.AnalyzedTrajectoryResponse;
-import ru.danilspirin.mteapibase.application.model.AnalyzedTrajectory;
+import ru.danilspirin.mteapibase.application.model.trajectory.AnalyzedTrajectory;
 
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,

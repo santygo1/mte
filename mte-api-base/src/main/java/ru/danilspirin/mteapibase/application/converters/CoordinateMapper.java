@@ -5,7 +5,7 @@ import org.mapstruct.MappingConstants;
 import ru.danilspirin.mteapibase.application.dto.CoordinateDto;
 import ru.danilspirin.mteapibase.application.dto.requests.CoordinateRequest;
 import ru.danilspirin.mteapibase.application.dto.responses.CoordinateResponse;
-import ru.danilspirin.mteapibase.application.model.CoordinateModel;
+import ru.danilspirin.mteapibase.application.model.trajectory.CoordinateModel;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 interface CoordinateMapper {

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.danilspirin.mteapibase.application.aop.logging.LogExecutionTime;
 import ru.danilspirin.mteapibase.application.converters.AnalyzeTrajectoryConverter;
 import ru.danilspirin.mteapibase.application.dto.AnalyzedTrajectoryDto;
-import ru.danilspirin.mteapibase.application.model.AnalyzedTrajectory;
+import ru.danilspirin.mteapibase.application.model.trajectory.AnalyzedTrajectory;
 import ru.danilspirin.mteapibase.application.repository.TrajectoryRepository;
 
 import java.util.List;

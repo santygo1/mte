@@ -1,4 +1,4 @@
-package ru.danilspirin.mteapibase.application.model;
+package ru.danilspirin.mteapibase.application.model.trajectory;
 
 public record CoordinateModel(
         double lat,

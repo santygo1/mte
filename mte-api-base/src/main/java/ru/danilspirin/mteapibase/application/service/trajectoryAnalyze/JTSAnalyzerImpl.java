@@ -3,9 +3,9 @@ package ru.danilspirin.mteapibase.application.service.trajectoryAnalyze;
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.impl.CoordinateArraySequence;
 import org.locationtech.jts.operation.buffer.BufferParameters;
-import ru.danilspirin.mteapibase.application.model.AnalyzedCoordinate;
-import ru.danilspirin.mteapibase.application.model.AnalyzedTrajectory;
-import ru.danilspirin.mteapibase.application.model.TrajectoryModel;
+import ru.danilspirin.mteapibase.application.model.trajectory.AnalyzedCoordinate;
+import ru.danilspirin.mteapibase.application.model.trajectory.AnalyzedTrajectory;
+import ru.danilspirin.mteapibase.application.model.trajectory.TrajectoryModel;
 
 import java.util.*;
 import java.util.function.Predicate;

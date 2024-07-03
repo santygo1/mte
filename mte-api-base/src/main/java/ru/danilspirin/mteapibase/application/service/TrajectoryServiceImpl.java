@@ -9,7 +9,7 @@ import ru.danilspirin.mteapibase.application.aop.logging.LogExecutionTime;
 import ru.danilspirin.mteapibase.application.converters.TrajectoryConverter;
 import ru.danilspirin.mteapibase.application.dto.TrajectoryDto;
 import ru.danilspirin.mteapibase.application.exception.TimeConvertError;
-import ru.danilspirin.mteapibase.application.model.TrajectoryModel;
+import ru.danilspirin.mteapibase.application.model.trajectory.TrajectoryModel;
 import ru.danilspirin.mteapibase.application.repository.TrajectoryRepository;
 import ru.danilspirin.mteapibase.application.utils.TimeUtil;
 

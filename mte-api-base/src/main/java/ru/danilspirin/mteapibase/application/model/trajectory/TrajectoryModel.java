@@ -1,4 +1,4 @@
-package ru.danilspirin.mteapibase.application.model;
+package ru.danilspirin.mteapibase.application.model.trajectory;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
