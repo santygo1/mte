@@ -1,6 +1,5 @@
 import AnalyzeTrajectoryContext from "./AnalyzeTrajectoryContext.js";
-import {useContext, useEffect, useState} from "react";
-import TrajectoryContext from "../TrajectoryContext/TrajectoryContext.js";
+import {useEffect, useState} from "react";
 import useFetch from "../../hooks/useFetch.js";
 import TrajectoryAnalyzeService from "../../api/service/TrajectoryAnalyzeService.js";
 import {useToasts} from "react-bootstrap-toasts";
@@ -9,8 +8,8 @@ import ComponentUtil from "../../util/ComponentUtil.jsx";
 
 const AnalyzeTrajectoryContextProvider = ({children}) => {
     const [isEnable, setIsEnable] = useState(false);
-    const {trajectories, setTrajectories} = useContext(TrajectoryContext);
     const toasts = useToasts();
+    const [analyzeResult, setAnalyzeResult] = useState(null);
     const [currentToastId, setCurrentToastId] = useState(null);
 
     const [fetchAnalyzeResult, isResultLoading, resultError] = useFetch(
@@ -51,13 +50,21 @@ const AnalyzeTrajectoryContextProvider = ({children}) => {
     }
 
     function applyAnalyzeResult(result) {
-        setTrajectories(TrajectoryAnalyzeService.getAnalyzeResultAppliedToTrajectories(trajectories, result));
+        setAnalyzeResult(result);
         setIsEnable(true);
     }
 
 
-    function doMainAreaAnalyze() {
+    function doAnalyze() {
+        console.log('Анализ')
         fetchAnalyzeResult();
+    }
+
+    function getTrajectoryAnalyze(trajectoryId) {
+        console.log(trajectoryId);
+        const result = analyzeResult.find(t => t.trajectoryId === trajectoryId);
+        console.log(result);
+        return result;
     }
 
     return (
@@ -65,7 +72,9 @@ const AnalyzeTrajectoryContextProvider = ({children}) => {
             value={{
                 isAnalyzeEnable: isEnable,
                 isAnalyzeProcessing: isResultLoading,
-                doMainAreaAnalyze: doMainAreaAnalyze
+                analyzeResult: analyzeResult,
+                doAnalyze: doAnalyze,
+                getTrajectoryAnalyze: getTrajectoryAnalyze
             }}
         >
             {children}

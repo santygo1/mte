@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 
 const AnalyzedTrajectoryPolyline = ({coordinates}) => {
     // Проверяем, есть ли хотя бы две точки для построения градиента
+    console.log(coordinates);
     if (coordinates.length < 2) {
         return null;
     }

@@ -10,6 +10,7 @@ import SystemErrorLogger from "../../util/SystemErrorLogger.js";
 import TrajectoryContext from "../../contexts/TrajectoryContext/TrajectoryContext.js";
 import AnalyzedTrajectoryPolyline from "../Trajectory/GradientPolyline/AnalyzedTrajectoryPolyline.jsx";
 import HotlinePolyline from "../Trajectory/GradientPolyline/AnalyzedTrajectoryPolyline.jsx";
+import AnalyzeTrajectoryContext from "../../contexts/AnalyzeTrajectoryContext/AnalyzeTrajectoryContext.js";
 
 const Map = () => {
     const mapRef = useRef(null);

@@ -10,22 +10,4 @@ export default class TrajectoryAnalyzeService {
         });
         return response.data;
     }
-
-    static getAnalyzeResultAppliedToTrajectories(currentTrajectories, analyzeResult) {
-        const newTrajectories = currentTrajectories.map(t => {
-            const currentResult = analyzeResult.find(r => r.trajectoryId === t.trajectoryId);
-
-            t.coordinates = currentResult.coordinates.map(c => {
-                const result = currentResult.coordinates.find(rc => c.lat === rc.lat && c.lon === rc.lon);
-                if (result != null) {
-                    c.intensity = result.intensity;
-                }
-                return c;
-            });
-
-            return t;
-        });
-
-        return newTrajectories;
-    }
 }

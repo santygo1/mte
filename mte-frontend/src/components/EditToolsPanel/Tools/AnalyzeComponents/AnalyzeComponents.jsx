@@ -9,12 +9,12 @@ import {Spinner} from "react-bootstrap";
 const AnalyzeComponents = () => {
 
     const {isViewMode} = useContext(MapContext);
-    const {doMainAreaAnalyze, isAnalyzeProcessing} = useContext(AnalyzeTrajectoryContext);
+    const {doAnalyze, isAnalyzeProcessing} = useContext(AnalyzeTrajectoryContext);
 
     return (isViewMode && <>
         <ToolButton
             overlayText={"Анализ"}
-            onClick={doMainAreaAnalyze}
+            onClick={doAnalyze}
             disabled={isAnalyzeProcessing}
         >
             {

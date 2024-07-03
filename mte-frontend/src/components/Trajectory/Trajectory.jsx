@@ -7,7 +7,7 @@ import {
     ONFOCUS_TRAJECTORY_WEIGHT
 } from "../../util/TrajectoryOptions.js";
 import AnalyzeTrajectoryContext from "../../contexts/AnalyzeTrajectoryContext/AnalyzeTrajectoryContext.js";
-import AnalyzedTrajectoryPolyline from "./GradientPolyline/AnalyzedTrajectoryPolyline.jsx";
+import HotlineTrajectory from "./HotlineTrajectory.jsx";
 
 const Trajectory = memo(function Trajectory({
                                                 trajectoryObj,
@@ -15,7 +15,7 @@ const Trajectory = memo(function Trajectory({
                                                 setCurrentTrajectory
                                             }) {
 
-    const {isAnalyzeEnable} = useContext(AnalyzeTrajectoryContext);
+    const {isAnalyzeEnable, getTrajectoryAnalyze} = useContext(AnalyzeTrajectoryContext);
 
     // В зависимости от выбрана траектория или нет устанавливаем определенные стили отображения
     let trajectoryOptions = DEFAULT_TRAJECTORY_OPTIONS;
@@ -40,21 +40,30 @@ const Trajectory = memo(function Trajectory({
         }
     }
 
+    const eventHandlers = {
+        click: () => setCurrentTrajectory(trajectoryObj),
+        mouseover: () => onHover(true),
+        mouseout: () => onHover(false)
+    }
+
+
     return (
         <>
             {
                 isAnalyzeEnable ?
-                    <AnalyzedTrajectoryPolyline coordinates={trajectoryObj.coordinates}/> :
+                    // <AnalyzedTrajectoryPolyline
+                    //     coordinates={getTrajectoryAnalyze(trajectoryObj.trajectoryId).coordinates}/> :
+                    <HotlineTrajectory
+                        coordinates={getTrajectoryAnalyze(trajectoryObj.trajectoryId).coordinates}
+                        onClick={() => eventHandlers.click()}>
+
+                    </HotlineTrajectory> :
 
                     <Polyline
                         ref={polylineRef}
                         positions={trajectoryObj.coordinates}
                         pathOptions={trajectoryOptions}
-                        eventHandlers={{
-                            click: () => setCurrentTrajectory(trajectoryObj),
-                            mouseover: () => onHover(true),
-                            mouseout: () => onHover(false)
-                        }}
+                        eventHandlers={eventHandlers}
                     />
             }
 
