@@ -7,11 +7,13 @@ import AnalyzeTrajectoryContext from "../../../../contexts/AnalyzeTrajectoryCont
 import {Button, Spinner} from "react-bootstrap";
 import classes from "./../components/ToolButton/CancelButton.module.css"
 import AnalyzeParametersForm from "./AnalyzeParametersForm/AnalyzeParametersForm.jsx";
+import TrajectoryContext from "../../../../contexts/TrajectoryContext/TrajectoryContext.js";
 
 const AnalyzeComponents = () => {
 
     const {isViewMode} = useContext(MapContext);
-    const {doAnalyze, isAnalyzeProcessing, isAnalyzeEnable, disableAnalyze} = useContext(AnalyzeTrajectoryContext);
+    const {trajectories} = useContext(TrajectoryContext);
+    const {isAnalyzeProcessing, isAnalyzeEnable, disableAnalyze} = useContext(AnalyzeTrajectoryContext);
     const [showFormParam, setShowFormParam] = useState();
 
     function cancel(e) {
@@ -25,7 +27,7 @@ const AnalyzeComponents = () => {
 
 
     return (
-        isViewMode && <>
+        (isViewMode && trajectories !== null && trajectories.length > 0) && <>
             <ToolButton
                 className={classes.ButtonWrapper}
                 overlayText={"Анализ"}

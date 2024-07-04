@@ -11,7 +11,6 @@ import SystemErrorLogger from "../../util/SystemErrorLogger.js";
 import InformationBlock from "./InformationBlock/InformationBlock.jsx";
 import EditTrajectoryContext from "../../contexts/EditTrajectoryContext/EditTrajectoryContext.js";
 import useFetch from "../../hooks/useFetch.js";
-import TrajectoryService from "../../api/service/TrajectoryService.js";
 import VesselService from "../../api/service/VesselService.js";
 import {flags} from "../../util/Flags.jsx";
 import {vessels} from "../../util/Vessels.js";
@@ -107,11 +106,10 @@ const TrajectoryOffcanvas = () => {
 }
 
 const OffcanvasBody = ({currentVessel}) => {
-    const {mode, setViewMode, setEditMode, isViewMode, isEditMode} = useContext(MapContext);
+    const {setViewMode, isViewMode} = useContext(MapContext);
     const {
         currentTrajectory,
         setCurrentTrajectory,
-        isCurrentTrajectory,
         currentTrajectoryExists
     } = useContext(TrajectoryContext);
     const {setEditableTrajectory} = useContext(EditTrajectoryContext);
@@ -154,18 +152,17 @@ const OffcanvasBody = ({currentVessel}) => {
                 />
 
                 <hr/>
-                {currentVessel !== null &&
-                    <InformationBlock
-                        title={"Судно"}
-                        values={[
-                            ["MMSI", currentVessel.mmsi],
-                            ["Название", currentVessel.name],
-                            ["Порт", currentVessel.port],
-                            ["Флаг", currentVessel.flag],
-                            ["Тип", currentVessel.stringType],
-                            ["Длина", currentVessel.length + " м."]
-                        ]}
-                    />
+                {<InformationBlock
+                    title={"Судно"}
+                    values={[
+                        ["MMSI", currentVessel.mmsi],
+                        ["Название", currentVessel.name],
+                        ["Порт", currentVessel.port],
+                        ["Флаг", currentVessel.flag],
+                        ["Тип", currentVessel.stringType],
+                        ["Длина", currentVessel.length + " м."]
+                    ]}
+                />
                 }
             </>
 

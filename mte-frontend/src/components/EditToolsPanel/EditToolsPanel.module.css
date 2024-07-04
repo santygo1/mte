@@ -4,31 +4,22 @@
     transform: translate(-50%, 0);
     display: flex;
     border-radius: 5px;
-    background: var(--base-ui-bkg-color-light);
-}
-
-
-.EditToolsPanel > *:first-child {
-    border-radius: 5px 0 0 5px;
-}
-
-.EditToolsPanel > *:last-child {
-    border-radius: 0 5px 5px 0;
+    gap: 5px;
 }
 
 .EditToolsPanel > * {
-    border-radius: 0 !important;
+    border-radius: 5px;
+    background: var(--base-ui-bkg-color-light) !important;
 }
 
 .EditToolsPanel > * {
-    background: transparent !important;
     border: none !important;
     color: var(--base-ui-primary-color-light) !important;
     transition: all .3s ease !important;
 }
 
 .EditToolsPanel > button:hover {
-    background: var(--base-ui-btn-hover-color-light) !important;
+    background: #d6d6d6 !important;
 }
 
 .EditToolsPanel > button:active {

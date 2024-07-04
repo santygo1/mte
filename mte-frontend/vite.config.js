@@ -10,6 +10,10 @@ export default defineConfig({
             '/api': {
                 target: 'http://localhost:8080',
                 secure: false
+            },
+            '/resources': {
+                target: 'http://localhost:8080',
+                secure: false
             }
         }
     }

@@ -18,7 +18,10 @@ export default class TrajectoryService {
     }
 
     static async checkNewTrajectoryCoordinate(trajectoryId, trajectory, newCoordinate) {
-        const response = await axios.post(`/api/v1/trajectories/${trajectoryId}/checkCoordinate`, newCoordinate);
+        const request = {...newCoordinate, lon: newCoordinate.lng};
+        console.log(request);
+
+        const response = await axios.post(`/api/v1/trajectories/${trajectoryId}/checkCoordinate`, request);
         return response.data;
     }
 }

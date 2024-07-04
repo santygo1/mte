@@ -10,18 +10,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.danilspirin.mteapibase.application.converters.AnalyzeTrajectoryConverter;
+import ru.danilspirin.mteapibase.application.converters.CoordinateMapper;
 import ru.danilspirin.mteapibase.application.converters.TrajectoryConverter;
 import ru.danilspirin.mteapibase.application.dto.AnalyzedTrajectoryDto;
 import ru.danilspirin.mteapibase.application.dto.TrajectoryDto;
+import ru.danilspirin.mteapibase.application.dto.requests.CheckCoordinateRequest;
 import ru.danilspirin.mteapibase.application.dto.requests.TrajectoryCreateRequest;
 import ru.danilspirin.mteapibase.application.dto.requests.TrajectoryUpdateRequest;
 import ru.danilspirin.mteapibase.application.dto.responses.AnalyzedTrajectoryResponse;
 import ru.danilspirin.mteapibase.application.dto.responses.TrajectoryResponse;
+import ru.danilspirin.mteapibase.application.exception.MarineZoneNotFound;
 import ru.danilspirin.mteapibase.application.exception.TrajectoryNotFound;
 import ru.danilspirin.mteapibase.application.service.TrajectoryService;
+import ru.danilspirin.mteapibase.application.service.checkCoordinate.CheckCoordinateService;
 import ru.danilspirin.mteapibase.application.service.trajectoryAnalyze.AnalyzeTrajectoryService;
+import ru.danilspirin.mteapibase.application.utils.TimeUtil;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/trajectories")
@@ -33,8 +39,12 @@ public class TrajectoryController {
     TrajectoryService trajectoryService;
     AnalyzeTrajectoryService analyzeTrajectoryService;
 
+    CheckCoordinateService checkCoordinateService;
+
     TrajectoryConverter trajectoryConverter;
     AnalyzeTrajectoryConverter analyzeTrajectoryConverter;
+
+    CoordinateMapper coordinateMapper;
 
     @GetMapping
     ResponseEntity<List<TrajectoryResponse>> getAll() {
@@ -81,11 +91,7 @@ public class TrajectoryController {
     ) {
         TrajectoryDto dto = trajectoryService.updateTrajectory(trajectoryId, trajectoryConverter.toDto(trajectoryUpdateRequest));
         TrajectoryResponse response = trajectoryConverter.toResponse(dto);
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
         return dto.isCreated() ?
                 ResponseEntity.created(
                                 ServletUriComponentsBuilder
@@ -106,27 +112,31 @@ public class TrajectoryController {
 
     // Пользовательский запрос, проверки корректности новой координаты траектории
     @PostMapping("/{trajectoryId}/checkCoordinate")
-    ResponseEntity<Void> checkNewCoordinateTrajectory(@PathVariable String trajectoryId) {
-        // TODO: заглушка проверки координаты
-        String newTrajectoryId = trajectoryId + "1214";
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    ResponseEntity<Void> checkNewCoordinateTrajectory(@PathVariable String trajectoryId, @RequestBody CheckCoordinateRequest request) {
 
-//        TrajectoryDto trajectoryModel = trajectoryService
-//                .getTrajectoryById(newTrajectoryId)
-//                .orElseThrow(() -> new TrajectoryNotFound(newTrajectoryId));
+        System.out.println(request);
+        if (!checkCoordinateService.isCoordinateCorrect( coordinateMapper.toDto(request), trajectoryId)){
+            throw new MarineZoneNotFound();
+        };
 
         return ResponseEntity
                 .ok().build();
     }
 
-
     @PostMapping("/analyze")
-    ResponseEntity<List<AnalyzedTrajectoryResponse>> analyzeTrajectory(@RequestParam String method) {
-        List<AnalyzedTrajectoryDto> analyzeResult = analyzeTrajectoryService.analyzeAllTrajectories(method);
+    ResponseEntity<List<AnalyzedTrajectoryResponse>> analyzeTrajectory(
+            @RequestParam Double radius,
+            @RequestParam Boolean interpolation,
+            @RequestParam(required = false) String dateFrom,
+            @RequestParam(required = false) String dateTo
+    ) {
+        List<AnalyzedTrajectoryDto> analyzeResult = analyzeTrajectoryService.analyzeAllTrajectories(
+                radius,
+                interpolation,
+                !Objects.equals(dateFrom, "") ? TimeUtil.fromStringToTimestamp(dateFrom) : null,
+                !Objects.equals(dateTo, "") ? TimeUtil.fromStringToTimestamp(dateTo) : null
+        );
+
         return ResponseEntity
                 .ok(
                         analyzeResult.stream()
@@ -134,5 +144,4 @@ public class TrajectoryController {
                                 .toList()
                 );
     }
-
 }

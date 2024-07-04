@@ -10,6 +10,7 @@ import ru.danilspirin.mteapibase.application.dto.AnalyzedTrajectoryDto;
 import ru.danilspirin.mteapibase.application.model.trajectory.AnalyzedTrajectory;
 import ru.danilspirin.mteapibase.application.repository.TrajectoryRepository;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -22,8 +23,12 @@ public class AnalyzeTrajectoryService {
 
 
     @LogExecutionTime
-    public List<AnalyzedTrajectoryDto> analyzeAllTrajectories(String method) {
-        Analyzer analyzer = new JTSAnalyzerImpl(0.4, 100);
+    public List<AnalyzedTrajectoryDto> analyzeAllTrajectories(double radius, boolean interpolation, Timestamp dateFrom, Timestamp dateTo) {
+        Analyzer analyzer = new JTSAnalyzerImpl(radius, interpolation ? 100: 0);
+        if (dateFrom != null && dateTo != null && dateTo.after(dateFrom)){
+            analyzer = analyzer
+                    .withCoordinateFilter((c) -> c.getTimestamp().before(dateTo) && c.getTimestamp().after(dateFrom));
+        }
         List<AnalyzedTrajectory> analyzedTrajectories = analyzer.analyze(repository.findAll());
 
         return analyzedTrajectories.stream()
