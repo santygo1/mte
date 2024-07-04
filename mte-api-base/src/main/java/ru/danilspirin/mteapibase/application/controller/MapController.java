@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.danilspirin.mteapibase.application.converters.TrajectoryConverter;
 import ru.danilspirin.mteapibase.application.dto.TrajectoryDto;
 import ru.danilspirin.mteapibase.application.dto.responses.TrajectoryResponse;
-import ru.danilspirin.mteapibase.application.model.TrajectoryModel;
 import ru.danilspirin.mteapibase.application.service.MapService;
 
 import java.util.List;

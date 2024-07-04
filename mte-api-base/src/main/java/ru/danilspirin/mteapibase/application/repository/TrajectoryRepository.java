@@ -2,7 +2,7 @@ package ru.danilspirin.mteapibase.application.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import ru.danilspirin.mteapibase.application.model.TrajectoryModel;
+import ru.danilspirin.mteapibase.application.model.trajectory.TrajectoryModel;
 
 import java.util.List;
 

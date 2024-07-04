@@ -1,0 +1,57 @@
+:root {
+    --circle-btn-size: 34px;
+}
+
+.CircleButton,
+.CircleButton:hover,
+.CircleButton:active,
+.CircleButton:focus {
+    background: transparent !important;
+    border: none !important;
+}
+
+.CircleButton {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center;
+    font-size: 12px !important;
+}
+
+
+.CircleButtonIconWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: var(--circle-btn-size);
+    height: var(--circle-btn-size);
+    border-radius: 100%;
+    border: solid 1px var(--base-ui-primary-color-light);
+    transition: all 0.2s ease;
+}
+
+.CircleButtonIcon {
+    color: var(--base-ui-primary-color-light)
+}
+
+.CircleButtonText {
+    margin-top: 3px;
+    color: var(--base-ui-primary-color-light);
+    word-break: auto-phrase;
+}
+
+.CircleButton:hover > .CircleButtonIconWrapper {
+    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.29);
+    -webkit-box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.29);
+    -moz-box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.29);
+
+}
+
+.CircleButton:active > .CircleButtonIconWrapper {
+    background: var(--base-ui-primary-color-light);
+}
+
+.CircleButton:active .CircleButtonIcon {
+    color: white;
+}
+
+

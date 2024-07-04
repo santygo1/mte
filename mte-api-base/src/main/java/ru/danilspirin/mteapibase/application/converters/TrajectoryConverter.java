@@ -7,7 +7,7 @@ import ru.danilspirin.mteapibase.application.dto.TrajectoryDto;
 import ru.danilspirin.mteapibase.application.dto.requests.TrajectoryCreateRequest;
 import ru.danilspirin.mteapibase.application.dto.requests.TrajectoryUpdateRequest;
 import ru.danilspirin.mteapibase.application.dto.responses.TrajectoryResponse;
-import ru.danilspirin.mteapibase.application.model.TrajectoryModel;
+import ru.danilspirin.mteapibase.application.model.trajectory.TrajectoryModel;
 
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,

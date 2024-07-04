@@ -1,0 +1,6 @@
+.ToolDelimiter {
+    display: block;
+    margin: 10px 5px;
+    width: 2px;
+    background: var(--base-ui-txt-color-light) !important;
+}

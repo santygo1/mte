@@ -9,10 +9,12 @@ import org.springframework.http.HttpStatus;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class HttpExceptionHandler extends RuntimeException {
     HttpStatus status;
+    String code;
 
-    HttpExceptionHandler(String msg, HttpStatus status) {
+    HttpExceptionHandler(String msg, HttpStatus status, String code) {
         super(msg);
         this.status = status;
+        this.code = code;
     }
 
 }

@@ -1,0 +1,12 @@
+.Confirmation {
+    z-index: 10055 !important;
+}
+
+.ConfirmationBackdrop {
+    z-index: 10050 !important;
+}
+
+.AdditionalComponentsWrapper {
+    margin-top: 20px;
+}
+

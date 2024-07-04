@@ -1,0 +1,19 @@
+.InformationBlock {
+    font-size: 14px;
+}
+
+.InformationBlockTitle {
+    font-weight: bold;
+}
+
+.InformationBlockBody {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px
+}
+
+.InformationBlockValue {
+    display: flex;
+    justify-content: space-between;
+}

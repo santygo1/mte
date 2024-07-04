@@ -1,0 +1,139 @@
+:root {
+    --sidebar-buttons-panel-width: 64px;
+    --sidbar-offcanvas-widht: 380px;
+    --sidbar-border-color: var(--base-ui-txt-color-light);
+    --sidebar-close-btn-icon-color: #70757a;
+}
+
+.MapSidebar {
+    top: 0;
+    left: 0;
+    display: flex;
+}
+
+.MapSidebar > * {
+    height: 100vh;
+}
+
+.MapSidebar > .OffcanvasWrapper {
+    left: var(--sidebar-buttons-panel-width);
+    display: block;
+}
+
+.MapSidebar > .ButtonsPanel {
+    display: flex;
+}
+
+.ButtonsPanel {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    background: var(--base-ui-bkg-color-light);
+    width: var(--sidebar-buttons-panel-width);
+    z-index: 9999;
+}
+
+.ButtonsPanel, .Offcanvas {
+    border-right: 1px solid var(--sidbar-border-color);
+}
+
+
+.ButtonsPanel > button {
+    width: 100%;
+    background: transparent;
+    margin: 10px 0;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--base-ui-btn-text-color-light);
+    border-radius: 0;
+    font-size: 14px;
+}
+
+.ButtonsPanel > button:first-child {
+    margin-top: 16px;
+}
+
+.ButtonsPanel > button:hover {
+    background: transparent;
+    color: var(--base-ui-primary-color-light);
+}
+
+.ButtonsPanel > button:active {
+    background-color: transparent !important;
+    color: var(--base-ui-primary-color-light) !important;
+    filter: brightness(85%);
+}
+
+.OffcanvasWrapper {
+    display: flex !important;
+    align-items: center;
+}
+
+.Offcanvas {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    z-index: 9998;
+    width: var(--sidbar-offcanvas-widht);
+    background: var(--base-ui-bkg-color-light);
+    box-shadow: 51px 4px 8px -51px rgba(0, 0, 0, 0.19) inset;
+    -webkit-box-shadow: 51px 4px 8px -51px rgba(0, 0, 0, 0.19) inset;
+    -moz-box-shadow: 51px 4px 8px -51px rgba(0, 0, 0, 0.19) inset;
+    border-right: solid 1px var(--base-ui-txt-color-light);
+}
+
+.OffcanvasHeader {
+    height: 160px;
+    background: #2730f8;
+    display: flex;
+}
+
+.Offcanvas .Vessel {
+    width: 100%;
+}
+
+.Offcanvas > .OffcanvasBody {
+    padding: 10px;
+}
+
+.OffcanvasButtonPanel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.OffcanvasButtonClose {
+    display: block;
+    width: 20px;
+    height: 60px;
+    background: var(--base-ui-bkg-color-light) !important;
+    border: none !important;
+    border-radius: 0 10px 10px 0 !important;
+    padding: 10px 0 !important;
+    color: var(--sidebar-close-btn-icon-color) !important;
+    font-size: 12px !important;
+}
+
+.OffcanvasEntering, .OffcanvasEntering ~ .OffcanvasButtonClose {
+    animation: ease .5s slide-offcanvas forwards;
+}
+
+.OffcanvasExiting, .OffcanvasExiting ~ .OffcanvasButtonClose {
+    animation: ease .7s slide-offcanvas reverse;
+}
+
+.OffcanvasExited {
+    display: none;
+}
+
+@keyframes slide-offcanvas {
+    0% {
+        transform: translateX(calc(var(--sidbar-offcanvas-widht) * -1));
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
