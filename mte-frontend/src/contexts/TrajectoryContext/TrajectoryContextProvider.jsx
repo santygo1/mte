@@ -23,6 +23,14 @@ const TrajectoryContextProvider = ({children}) => {
     }, [isViewMode]);
 
     useEffect(() => {
+        if (trajectoriesError !== null) {
+            setTimeout(() => {
+                fetchTrajectories()
+            }, 500);
+        }
+    }, [trajectoriesError]);
+
+    useEffect(() => {
         if (currentTrajectory !== null) {
             setCurrentTrajectory(trajectories.filter((i) => i.trajectoryId === currentTrajectory.trajectoryId)[0]);
         }
@@ -43,7 +51,9 @@ const TrajectoryContextProvider = ({children}) => {
             currentTrajectory: currentTrajectory,
             setCurrentTrajectory: setCurrentTrajectory,
             trajectories: trajectories,
+            fetchTrajectories: fetchTrajectories,
             setTrajectories: setTrajectories,
+            isTrajectoriesLoading: isTrajectoriesLoading,
             isCurrentTrajectory: isCurrentTrajectory,
             currentTrajectoryExists: currentTrajectoryExists
         }}>{children}</TrajectoryContext.Provider>
